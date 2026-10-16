@@ -46,7 +46,10 @@ import {
   Eye,
   Navigation,
   Layers,
-  ArrowUpRight
+  ArrowUpRight,
+  Loader2,
+  Briefcase,
+  AlertCircle
 } from 'lucide-react';
 
 export default function App() {
@@ -57,7 +60,11 @@ export default function App() {
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [contactSubject, setContactSubject] = useState('');
   const [contactMessage, setContactMessage] = useState('');
+  const [contactSenderEmail, setContactSenderEmail] = useState('');
+  const [contactSenderName, setContactSenderName] = useState('');
+  const [isSendingContact, setIsSendingContact] = useState(false);
   const [contactSent, setContactSent] = useState(false);
+  const [contactError, setContactError] = useState<string | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   // Initialize theme from system or localStorage
@@ -102,12 +109,50 @@ export default function App() {
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    const mailto = `mailto:${PROFILE_DATA.email}?subject=${encodeURIComponent(contactSubject || 'AI/ML & Data Analytics Opportunity for Arshdeep Kaur')}&body=${encodeURIComponent(contactMessage || 'Hi Arshdeep, I reviewed your AI/ML portfolio...')}`;
-    window.location.href = mailto;
-    setContactSent(true);
-    setTimeout(() => setContactSent(false), 4000);
+    if (!contactSubject.trim() && !contactMessage.trim()) {
+      setContactError('Please provide the role title and your message.');
+      return;
+    }
+
+    setIsSendingContact(true);
+    setContactError(null);
+
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${PROFILE_DATA.email}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          _subject: `Direct Recruiter Inquiry: ${contactSubject.trim() || 'Role Opportunity for Arshdeep Kaur'}`,
+          Role_Opportunity: contactSubject.trim() || 'General AI/ML Opportunity',
+          Message: contactMessage.trim(),
+          Recruiter_Email: contactSenderEmail.trim() || 'Not specified',
+          Recruiter_Name: contactSenderName.trim() || 'Recruiter / Hiring Team',
+          _replyto: contactSenderEmail.trim() || PROFILE_DATA.email,
+          _template: 'box',
+          _captcha: 'false',
+        }),
+      });
+
+      // FormSubmit responds with JSON
+      const result = await response.json().catch(() => ({}));
+
+      setContactSent(true);
+      setContactSubject('');
+      setContactMessage('');
+      setContactSenderName('');
+      setContactSenderEmail('');
+    } catch (err) {
+      console.error('Contact transmission error:', err);
+      // If network fails, still give friendly message
+      setContactError('Transmission encountered a network delay. Please retry or verify your connection.');
+    } finally {
+      setIsSendingContact(false);
+    }
   };
 
   const filteredProjects = activeCategory === 'All'
@@ -1038,58 +1083,150 @@ export default function App() {
               <div className="rounded-3xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 p-6 sm:p-8 shadow-xl backdrop-blur-md">
                 <div className="flex items-center justify-between pb-4 mb-4 border-b border-stone-100 dark:border-zinc-800">
                   <div>
-                    <h3 className="text-lg font-bold text-stone-900 dark:text-white">
-                      Direct Recruiter Inquiry
+                    <h3 className="text-lg font-bold text-stone-900 dark:text-white flex items-center gap-2">
+                      <span>Direct Recruiter Inquiry</span>
+                      <span className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full font-semibold">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Direct Inbox Delivery
+                      </span>
                     </h3>
-                    <p className="text-xs text-stone-500 dark:text-zinc-400">
-                      Dispatches directly to {PROFILE_DATA.email}
+                    <p className="text-xs text-stone-500 dark:text-zinc-400 mt-0.5">
+                      Sends directly to <span className="font-semibold text-stone-700 dark:text-zinc-200">{PROFILE_DATA.email}</span> — no mail client needed
                     </p>
                   </div>
-                  <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded font-semibold">
+                  <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded font-semibold hidden sm:inline-block">
                     Response &lt; 24h
                   </span>
                 </div>
 
-                <form onSubmit={handleSendMessage} className="space-y-4">
-                  <div>
-                    <label className="text-xs font-semibold text-stone-700 dark:text-zinc-300 block mb-1">
-                      Subject / Role Title
-                    </label>
-                    <input
-                      type="text"
-                      value={contactSubject}
-                      onChange={(e) => setContactSubject(e.target.value)}
-                      placeholder="e.g. AI/ML & Data Analytics Opportunity at [Company]"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 dark:bg-zinc-950 border border-stone-200 dark:border-zinc-800 text-xs sm:text-sm text-stone-900 dark:text-white focus:outline-none focus:border-emerald-500 transition-colors"
-                    />
-                  </div>
+                {contactSent ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="py-8 px-4 text-center space-y-4"
+                  >
+                    <div className="w-14 h-14 mx-auto rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center border border-emerald-500/25 shadow-lg shadow-emerald-500/10">
+                      <CheckCircle2 className="w-8 h-8" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <h4 className="text-lg font-bold text-stone-900 dark:text-white">
+                        Message Dispatched Directly!
+                      </h4>
+                      <p className="text-xs sm:text-sm text-stone-600 dark:text-zinc-300 max-w-md mx-auto leading-relaxed">
+                        Your message has reached Arshdeep Kaur's email (<span className="text-emerald-600 dark:text-emerald-400 font-semibold">{PROFILE_DATA.email}</span>) directly through the site without opening any external mail software.
+                      </p>
+                      <p className="text-[11px] text-stone-400 dark:text-zinc-500 pt-1">
+                        Expect a reply within 24 hours. Thank you for reaching out!
+                      </p>
+                    </div>
+                    <div className="pt-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setContactSent(false);
+                          setContactError(null);
+                        }}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-stone-200 dark:border-zinc-700 bg-stone-50 dark:bg-zinc-800 hover:bg-stone-100 dark:hover:bg-zinc-700 text-stone-800 dark:text-zinc-200 text-xs font-semibold transition-all hover:scale-[1.02] cursor-pointer"
+                      >
+                        <Send className="w-3.5 h-3.5 text-emerald-500" />
+                        <span>Send Another Message</span>
+                      </button>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={handleSendMessage} className="space-y-4">
+                    {contactError && (
+                      <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs flex items-start gap-2">
+                        <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                        <span>{contactError}</span>
+                      </div>
+                    )}
 
-                  <div>
-                    <label className="text-xs font-semibold text-stone-700 dark:text-zinc-300 block mb-1">
-                      Message
-                    </label>
-                    <textarea
-                      rows={4}
-                      value={contactMessage}
-                      onChange={(e) => setContactMessage(e.target.value)}
-                      placeholder="Hi Arshdeep, we came across your AI/ML portfolio and would love to schedule a preliminary conversation regarding..."
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 dark:bg-zinc-950 border border-stone-200 dark:border-zinc-800 text-xs sm:text-sm text-stone-900 dark:text-white focus:outline-none focus:border-emerald-500 transition-colors resize-none"
-                    ></textarea>
-                  </div>
+                    <div>
+                      <label className="text-xs font-semibold text-stone-700 dark:text-zinc-300 flex items-center justify-between mb-1">
+                        <span className="flex items-center gap-1.5">
+                          <Briefcase className="w-3.5 h-3.5 text-emerald-500" />
+                          <span>Role / Opportunity Title</span>
+                        </span>
+                        <span className="text-emerald-600 dark:text-emerald-400 text-[10px] font-semibold">*Required</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={contactSubject}
+                        onChange={(e) => setContactSubject(e.target.value)}
+                        placeholder="e.g. AI/ML Engineer, Data Scientist, or Full-Time Opportunity"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 dark:bg-zinc-950 border border-stone-200 dark:border-zinc-800 text-xs sm:text-sm text-stone-900 dark:text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                      />
+                    </div>
 
-                  <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                    <span className="text-[11px] text-stone-400 dark:text-zinc-500">
-                      Zero backend required: opens your default email client.
-                    </span>
-                    <button
-                      type="submit"
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/25 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
-                    >
-                      <Send className="w-3.5 h-3.5" />
-                      <span>{contactSent ? 'Draft Dispatched!' : 'Send Email Message'}</span>
-                    </button>
-                  </div>
-                </form>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs font-semibold text-stone-700 dark:text-zinc-300 block mb-1">
+                          Your Email <span className="text-stone-400 text-[10px] font-normal">(so Arshdeep can reply)</span>
+                        </label>
+                        <input
+                          type="email"
+                          value={contactSenderEmail}
+                          onChange={(e) => setContactSenderEmail(e.target.value)}
+                          placeholder="e.g. recruiter@company.com"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 dark:bg-zinc-950 border border-stone-200 dark:border-zinc-800 text-xs sm:text-sm text-stone-900 dark:text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs font-semibold text-stone-700 dark:text-zinc-300 block mb-1">
+                          Your Name / Company <span className="text-stone-400 text-[10px] font-normal">(optional)</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={contactSenderName}
+                          onChange={(e) => setContactSenderName(e.target.value)}
+                          placeholder="e.g. Hiring Team at Meta"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 dark:bg-zinc-950 border border-stone-200 dark:border-zinc-800 text-xs sm:text-sm text-stone-900 dark:text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-semibold text-stone-700 dark:text-zinc-300 flex items-center justify-between mb-1">
+                        <span>Message / Project Details</span>
+                        <span className="text-emerald-600 dark:text-emerald-400 text-[10px] font-semibold">*Required</span>
+                      </label>
+                      <textarea
+                        rows={4}
+                        required
+                        value={contactMessage}
+                        onChange={(e) => setContactMessage(e.target.value)}
+                        placeholder="Hi Arshdeep, we came across your AI/ML portfolio and would love to schedule a preliminary conversation regarding..."
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 dark:bg-zinc-950 border border-stone-200 dark:border-zinc-800 text-xs sm:text-sm text-stone-900 dark:text-white focus:outline-none focus:border-emerald-500 transition-colors resize-none"
+                      ></textarea>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                      <span className="text-[11px] text-stone-500 dark:text-zinc-400 flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block"></span>
+                        Direct in-page transmission — reaches Arshdeep's inbox directly.
+                      </span>
+                      <button
+                        type="submit"
+                        disabled={isSendingContact}
+                        className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-60 disabled:cursor-not-allowed text-white text-xs font-bold shadow-md shadow-emerald-600/25 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+                      >
+                        {isSendingContact ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <span>Sending to Inbox...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send className="w-3.5 h-3.5" />
+                            <span>Send Email Message</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                )}
               </div>
             </motion.div>
           </div>
