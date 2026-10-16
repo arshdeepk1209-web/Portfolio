@@ -74,11 +74,13 @@ export default function App() {
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
       try {
         localStorage.setItem('theme', 'dark');
       } catch {}
     } else {
       document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
       try {
         localStorage.setItem('theme', 'light');
       } catch {}
@@ -108,7 +110,7 @@ export default function App() {
     : PROFILE_DATA.projects.filter(p => p.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200">
+    <div className={`${darkMode ? 'dark' : ''} min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200`}>
       {/* Offline Status Badge */}
       <OfflineIndicator />
 
