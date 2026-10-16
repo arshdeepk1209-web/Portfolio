@@ -36,7 +36,7 @@ export const OfflineIndicator: React.FC = () => {
                 <span>Status: Fully Offline Capable</span>
                 <button 
                   onClick={() => setShowDetails(false)}
-                  className="text-teal-400 hover:underline"
+                  className="text-emerald-400 hover:underline cursor-pointer"
                 >
                   Dismiss
                 </button>

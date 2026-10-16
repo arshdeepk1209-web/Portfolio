@@ -40,7 +40,7 @@ export const GitHubPagesModal: React.FC<GitHubPagesModalProps> = ({ isOpen, onCl
       <div className="relative w-full max-w-2xl rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-6 text-slate-800 dark:text-slate-100">
         <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400">
+            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
               <Globe className="w-5 h-5" />
             </div>
             <div>
@@ -61,14 +61,14 @@ export const GitHubPagesModal: React.FC<GitHubPagesModalProps> = ({ isOpen, onCl
         </div>
 
         <div className="mt-4 space-y-4 text-xs text-slate-600 dark:text-slate-300">
-          <div className="flex items-start gap-3 p-3 rounded-xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800/50">
-            <ShieldCheck className="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" />
+          <div className="flex items-start gap-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/50">
+            <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold text-teal-900 dark:text-teal-200 block text-xs">
+              <span className="font-bold text-emerald-900 dark:text-emerald-200 block text-xs">
                 Zero-Config GitHub Actions Ready
               </span>
-              <p className="text-[11px] text-teal-700 dark:text-teal-300/90 mt-0.5">
-                We have pre-configured <code className="font-mono bg-teal-100 dark:bg-teal-900 px-1 py-0.5 rounded">.github/workflows/deploy.yml</code> and relative path routing (<code className="font-mono bg-teal-100 dark:bg-teal-900 px-1 py-0.5 rounded">base: &apos;./&apos;</code>). All assets, icons, service workers, and simulators work out-of-the-box on GitHub Pages!
+              <p className="text-[11px] text-emerald-700 dark:text-emerald-300/90 mt-0.5">
+                We have pre-configured <code className="font-mono bg-emerald-100 dark:bg-emerald-900 px-1 py-0.5 rounded">.github/workflows/deploy.yml</code> and relative path routing (<code className="font-mono bg-emerald-100 dark:bg-emerald-900 px-1 py-0.5 rounded">base: &apos;./&apos;</code>). All assets, icons, service workers, and simulators work out-of-the-box on GitHub Pages!
               </p>
             </div>
           </div>
@@ -80,14 +80,14 @@ export const GitHubPagesModal: React.FC<GitHubPagesModalProps> = ({ isOpen, onCl
                   <span className="font-bold text-slate-900 dark:text-white text-xs">{step.title}</span>
                   <button
                     onClick={() => copyCode(step.command, idx)}
-                    className="flex items-center gap-1 text-[11px] text-teal-600 dark:text-teal-400 hover:underline cursor-pointer"
+                    className="flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
                   >
                     {copiedIndex === idx ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
                     <span>{copiedIndex === idx ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-2">{step.detail}</p>
-                <pre className="p-2.5 rounded-lg bg-slate-900 text-teal-300 font-mono text-[10px] overflow-x-auto">
+                <pre className="p-2.5 rounded-lg bg-slate-900 text-emerald-300 font-mono text-[10px] overflow-x-auto">
                   {step.command}
                 </pre>
               </div>

@@ -16,7 +16,7 @@ export function generateResumePDF() {
 
   // Colors
   const primaryColor: [number, number, number] = [15, 23, 42]; // Slate 900
-  const secondaryColor: [number, number, number] = [13, 148, 136]; // Teal 600
+  const secondaryColor: [number, number, number] = [5, 150, 105]; // Emerald 600
   const textColor: [number, number, number] = [30, 41, 59]; // Slate 800
   const mutedColor: [number, number, number] = [100, 116, 139]; // Slate 500
 

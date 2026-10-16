@@ -69,7 +69,7 @@ ${PROFILE_DATA.certifications.map((c) => `• ${c.name} — ${c.issuer} (${c.yea
         {/* Modal Header */}
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400">
+            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
               <FileText className="w-5 h-5" />
             </div>
             <div>
@@ -88,7 +88,7 @@ ${PROFILE_DATA.certifications.map((c) => `• ${c.name} — ${c.issuer} (${c.yea
           <div className="flex items-center gap-2">
             <button
               onClick={generateResumePDF}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold shadow-md shadow-teal-600/20 transition cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 transition cursor-pointer"
               title="Download direct PDF file"
             >
               <Download className="w-3.5 h-3.5" />
@@ -129,7 +129,7 @@ ${PROFILE_DATA.certifications.map((c) => `• ${c.name} — ${c.issuer} (${c.yea
             onClick={() => setActiveTab('preview')}
             className={`pb-2.5 px-3 border-b-2 transition cursor-pointer ${
               activeTab === 'preview'
-                ? 'border-teal-500 text-teal-600 dark:text-teal-400'
+                ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
             }`}
           >
@@ -139,7 +139,7 @@ ${PROFILE_DATA.certifications.map((c) => `• ${c.name} — ${c.issuer} (${c.yea
             onClick={() => setActiveTab('ats')}
             className={`pb-2.5 px-3 border-b-2 transition cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'ats'
-                ? 'border-teal-500 text-teal-600 dark:text-teal-400'
+                ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
             }`}
           >
@@ -215,7 +215,7 @@ ${PROFILE_DATA.certifications.map((c) => `• ${c.name} — ${c.issuer} (${c.yea
                     ].map((kw, i) => (
                       <span
                         key={i}
-                        className="text-xs font-medium px-2.5 py-1 rounded-lg bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800/60"
+                        className="text-xs font-medium px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60"
                       >
                         ✓ {kw}
                       </span>
@@ -234,18 +234,18 @@ ${PROFILE_DATA.certifications.map((c) => `• ${c.name} — ${c.issuer} (${c.yea
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-700 mt-1.5 font-medium">
                   {PROFILE_DATA.location} &nbsp;|&nbsp;
-                  <a href={`mailto:${PROFILE_DATA.email}`} className="text-teal-700 hover:underline">
+                  <a href={`mailto:${PROFILE_DATA.email}`} className="text-emerald-700 hover:underline">
                     {PROFILE_DATA.email}
                   </a>{' '}
                   &nbsp;|&nbsp;
                   <span>{PROFILE_DATA.phone}</span> &nbsp;|&nbsp;
-                  <a href={PROFILE_DATA.linkedin} target="_blank" rel="noreferrer" className="text-teal-700 hover:underline">
+                  <a href={PROFILE_DATA.linkedin} target="_blank" rel="noreferrer" className="text-emerald-700 hover:underline">
                     linkedin.com/in/arshdeep-kaur-9ba3a1357
                   </a>
                 </p>
                 <p className="text-xs text-slate-600 mt-1">
-                  GitHub: <a href={PROFILE_DATA.github} className="text-teal-700 hover:underline">{PROFILE_DATA.github}</a> &nbsp;|&nbsp;
-                  Tableau: <a href={PROFILE_DATA.tableau} className="text-teal-700 hover:underline">public.tableau.com/app/profile/arshdeep.kaur7968</a>
+                  GitHub: <a href={PROFILE_DATA.github} className="text-emerald-700 hover:underline">{PROFILE_DATA.github}</a> &nbsp;|&nbsp;
+                  Tableau: <a href={PROFILE_DATA.tableau} className="text-emerald-700 hover:underline">public.tableau.com/app/profile/arshdeep.kaur7968</a>
                 </p>
               </div>
 
@@ -281,7 +281,7 @@ ${PROFILE_DATA.certifications.map((c) => `• ${c.name} — ${c.issuer} (${c.yea
                       {exp.link && (
                         <li>
                           <strong>Tableau Profile:</strong>{' '}
-                          <a href={exp.link.url} target="_blank" rel="noreferrer" className="text-teal-700 underline">
+                          <a href={exp.link.url} target="_blank" rel="noreferrer" className="text-emerald-700 underline">
                             {exp.link.url}
                           </a>
                         </li>
@@ -303,7 +303,7 @@ ${PROFILE_DATA.certifications.map((c) => `• ${c.name} — ${c.issuer} (${c.yea
                         {proj.title}
                       </span>
                       {proj.githubUrl && (
-                        <a href={proj.githubUrl} target="_blank" rel="noreferrer" className="text-[11px] text-teal-700 hover:underline">
+                        <a href={proj.githubUrl} target="_blank" rel="noreferrer" className="text-[11px] text-emerald-700 hover:underline">
                           GitHub: {proj.githubUrl}
                         </a>
                       )}

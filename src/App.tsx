@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { PROFILE_DATA } from './data/profile';
 import { generateResumePDF } from './utils/generateResumePDF';
 import { AvatarProfile } from './components/AvatarProfile';
@@ -41,7 +42,8 @@ import {
   ShieldCheck,
   Eye,
   Navigation,
-  Layers
+  Layers,
+  ArrowUpRight
 } from 'lucide-react';
 
 export default function App() {
@@ -70,7 +72,7 @@ export default function App() {
     }
   }, []);
 
-  // Sync dark class on html root
+  // Sync dark class on html root & body
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -99,7 +101,7 @@ export default function App() {
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    const mailto = `mailto:${PROFILE_DATA.email}?subject=${encodeURIComponent(contactSubject || 'Job Opportunity / Inquiry for Arshdeep Kaur')}&body=${encodeURIComponent(contactMessage || 'Hi Arshdeep, I reviewed your AI/ML portfolio...')}`;
+    const mailto = `mailto:${PROFILE_DATA.email}?subject=${encodeURIComponent(contactSubject || 'AI/ML & Data Analytics Opportunity for Arshdeep Kaur')}&body=${encodeURIComponent(contactMessage || 'Hi Arshdeep, I reviewed your AI/ML portfolio...')}`;
     window.location.href = mailto;
     setContactSent(true);
     setTimeout(() => setContactSent(false), 4000);
@@ -109,8 +111,18 @@ export default function App() {
     ? PROFILE_DATA.projects
     : PROFILE_DATA.projects.filter(p => p.category === activeCategory);
 
+  // Framer easing curve
+  const framerEase = [0.16, 1, 0.3, 1] as const;
+
   return (
-    <div className={`${darkMode ? 'dark' : ''} min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200`}>
+    <div className={`${darkMode ? 'dark' : ''} min-h-screen bg-stone-50 dark:bg-zinc-950 text-stone-900 dark:text-zinc-100 transition-colors duration-300 relative selection:bg-emerald-500 selection:text-white overflow-x-hidden`}>
+      {/* Framer-style ambient blurred mesh background (Emerald & Warm Amber - Zero Blue) */}
+      <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        <div className="absolute -top-32 -left-32 w-96 sm:w-[550px] h-96 sm:h-[550px] bg-emerald-500/10 dark:bg-emerald-500/15 rounded-full blur-[110px] animate-drift"></div>
+        <div className="absolute top-1/3 -right-32 w-96 sm:w-[500px] h-96 sm:h-[500px] bg-amber-500/8 dark:bg-amber-500/10 rounded-full blur-[120px] animate-drift-slow"></div>
+        <div className="absolute -bottom-40 left-1/4 w-96 sm:w-[600px] h-96 sm:h-[600px] bg-emerald-600/10 dark:bg-emerald-600/15 rounded-full blur-[130px] animate-drift"></div>
+      </div>
+
       {/* Offline Status Badge */}
       <OfflineIndicator />
 
@@ -127,42 +139,58 @@ export default function App() {
       />
 
       {/* NAVIGATION BAR */}
-      <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800/80 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
+      <header className="sticky top-0 z-40 w-full border-b border-stone-200/80 dark:border-zinc-800/80 bg-white/75 dark:bg-zinc-950/75 backdrop-blur-xl transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Logo / Brand */}
-          <a href="#" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-teal-500/20 group-hover:scale-105 transition">
+          <motion.a
+            href="#"
+            initial={{ opacity: 0, x: -15 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: framerEase }}
+            className="flex items-center gap-2.5 group"
+          >
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-amber-500 flex items-center justify-center text-white font-extrabold text-sm shadow-md shadow-emerald-600/25 group-hover:scale-105 group-hover:rotate-1 transition-transform duration-300">
               AK
             </div>
             <div>
-              <span className="font-extrabold text-sm sm:text-base tracking-tight text-slate-900 dark:text-white block leading-tight">
+              <span className="font-extrabold text-sm sm:text-base tracking-tight text-stone-900 dark:text-white block leading-tight">
                 Arshdeep Kaur
               </span>
-              <span className="text-[10px] text-teal-600 dark:text-teal-400 font-mono tracking-wider block">
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono tracking-wider block font-semibold">
                 AI & ML GRADUATE
               </span>
             </div>
-          </a>
+          </motion.a>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-600 dark:text-slate-300">
-            <a href="#about" className="hover:text-teal-500 transition">About</a>
-            <a href="#projects" className="hover:text-teal-500 transition">Projects</a>
-            <a href="#experience" className="hover:text-teal-500 transition">Experience</a>
-            <a href="#skills" className="hover:text-teal-500 transition">Skills</a>
-            <a href="#education" className="hover:text-teal-500 transition">Education</a>
-            <a href="#contact" className="hover:text-teal-500 transition">Contact</a>
-          </nav>
+          <motion.nav
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1, ease: framerEase }}
+            className="hidden md:flex items-center gap-6 text-xs font-semibold text-stone-600 dark:text-zinc-300"
+          >
+            <a href="#about" className="hover:text-emerald-500 transition-colors">About</a>
+            <a href="#projects" className="hover:text-emerald-500 transition-colors">Projects</a>
+            <a href="#experience" className="hover:text-emerald-500 transition-colors">Experience</a>
+            <a href="#skills" className="hover:text-emerald-500 transition-colors">Skills</a>
+            <a href="#education" className="hover:text-emerald-500 transition-colors">Education</a>
+            <a href="#contact" className="hover:text-emerald-500 transition-colors">Contact</a>
+          </motion.nav>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-2.5">
+          <motion.div
+            initial={{ opacity: 0, x: 15 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: framerEase }}
+            className="flex items-center gap-2.5"
+          >
             {/* PWA Install */}
             <PWAInstallButton />
 
             {/* Resume Button */}
             <button
               onClick={() => setIsResumeModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-500 hover:bg-teal-600 text-white text-xs font-semibold shadow-md shadow-teal-500/20 transition cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
             >
               <FileText className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Resume</span>
@@ -171,129 +199,167 @@ export default function App() {
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+              className="p-2 rounded-xl text-stone-600 dark:text-zinc-300 hover:bg-stone-200/60 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
               title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               aria-label="Toggle dark mode"
             >
-              {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+              {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-stone-700" />}
             </button>
 
             {/* Mobile Menu Trigger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+              className="md:hidden p-2 rounded-xl text-stone-600 dark:text-zinc-300 hover:bg-stone-200/60 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
-          </div>
+          </motion.div>
         </div>
 
         {/* Mobile Dropdown */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 space-y-2 text-sm font-medium">
-            <a
-              href="#about"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-1.5 text-slate-700 dark:text-slate-200 hover:text-teal-500"
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25, ease: framerEase }}
+              className="md:hidden border-b border-stone-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl px-4 py-3 space-y-2 text-sm font-medium overflow-hidden"
             >
-              About
-            </a>
-            <a
-              href="#projects"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-1.5 text-slate-700 dark:text-slate-200 hover:text-teal-500"
-            >
-              Projects
-            </a>
-            <a
-              href="#experience"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-1.5 text-slate-700 dark:text-slate-200 hover:text-teal-500"
-            >
-              Experience
-            </a>
-            <a
-              href="#skills"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-1.5 text-slate-700 dark:text-slate-200 hover:text-teal-500"
-            >
-              Skills
-            </a>
-            <a
-              href="#education"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-1.5 text-slate-700 dark:text-slate-200 hover:text-teal-500"
-            >
-              Education & Certifications
-            </a>
-            <a
-              href="#contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-1.5 text-slate-700 dark:text-slate-200 hover:text-teal-500"
-            >
-              Contact
-            </a>
-            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setIsResumeModalOpen(true);
-                }}
-                className="text-xs text-teal-500 font-semibold flex items-center gap-1"
+              <a
+                href="#about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-1.5 text-stone-700 dark:text-zinc-200 hover:text-emerald-500"
               >
-                <Download className="w-3.5 h-3.5" />
-                <span>Download Resume (PDF)</span>
-              </button>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setIsGitHubModalOpen(true);
-                }}
-                className="text-xs text-slate-400 hover:text-slate-200"
+                About
+              </a>
+              <a
+                href="#projects"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-1.5 text-stone-700 dark:text-zinc-200 hover:text-emerald-500"
               >
-                Hosting Guide
-              </button>
-            </div>
-          </div>
-        )}
+                Projects
+              </a>
+              <a
+                href="#experience"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-1.5 text-stone-700 dark:text-zinc-200 hover:text-emerald-500"
+              >
+                Experience
+              </a>
+              <a
+                href="#skills"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-1.5 text-stone-700 dark:text-zinc-200 hover:text-emerald-500"
+              >
+                Skills
+              </a>
+              <a
+                href="#education"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-1.5 text-stone-700 dark:text-zinc-200 hover:text-emerald-500"
+              >
+                Education & Certifications
+              </a>
+              <a
+                href="#contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-1.5 text-stone-700 dark:text-zinc-200 hover:text-emerald-500"
+              >
+                Contact
+              </a>
+              <div className="pt-2 border-t border-stone-200 dark:border-zinc-800 flex items-center justify-between">
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setIsResumeModalOpen(true);
+                  }}
+                  className="text-xs text-emerald-500 font-semibold flex items-center gap-1"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download Resume (PDF)</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setIsGitHubModalOpen(true);
+                  }}
+                  className="text-xs text-stone-500 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-200"
+                >
+                  Hosting Guide
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* HERO SECTION */}
-      <section id="about" className="relative overflow-hidden pt-12 pb-16 md:pt-20 md:pb-24 border-b border-slate-200 dark:border-slate-800/60">
-        {/* Ambient gradient blobs */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -z-10 w-[600px] h-[300px] bg-gradient-to-tr from-teal-500/10 via-cyan-500/10 to-indigo-500/10 blur-3xl rounded-full pointer-events-none"></div>
-
+      <section id="about" className="relative overflow-hidden pt-12 pb-16 md:pt-20 md:pb-28 border-b border-stone-200/70 dark:border-zinc-800/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column: Text & Intro */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 dark:bg-teal-950/60 border border-teal-200 dark:border-teal-800/80 text-teal-700 dark:text-teal-300 text-xs font-semibold">
-                <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: framerEase }}
+              className="lg:col-span-7 space-y-6 text-center lg:text-left"
+            >
+              {/* Pill Badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.1, ease: framerEase }}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300/60 dark:border-emerald-700/60 text-emerald-800 dark:text-emerald-300 text-xs font-semibold shadow-xs"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>Open for Roles in AI/ML & Data Analytics</span>
-              </div>
+              </motion.div>
 
               {/* Title & Name */}
               <div className="space-y-2">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                  Hi, I&apos;m <span className="bg-gradient-to-r from-teal-500 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">Arshdeep Kaur</span>
-                </h1>
-                <p className="text-lg sm:text-xl font-medium text-slate-600 dark:text-slate-300">
+                <motion.h1
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.65, delay: 0.15, ease: framerEase }}
+                  className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-stone-900 dark:text-white"
+                >
+                  Hi, I&apos;m{' '}
+                  <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-amber-500 bg-clip-text text-transparent">
+                    Arshdeep Kaur
+                  </span>
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.65, delay: 0.25, ease: framerEase }}
+                  className="text-lg sm:text-xl font-medium text-stone-600 dark:text-zinc-300"
+                >
                   AI & ML Graduate | Data Analytics & Computer Vision
-                </p>
+                </motion.p>
               </div>
 
               {/* Summary */}
-              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300/90 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.65, delay: 0.35, ease: framerEase }}
+                className="text-sm sm:text-base text-stone-600 dark:text-zinc-300/90 leading-relaxed max-w-2xl mx-auto lg:mx-0"
+              >
                 AI & ML Graduate with hands-on, applied experience across machine learning, computer vision, data analysis, and predictive modeling. Currently pursuing an MCA specializing in AI & Machine Learning (2025–2027) with Intel-mentored training, computer vision pipelines (FastAPI + OpenVINO + YOLOv8 + BLIP-2), and Tableau analytics.
-              </p>
+              </motion.p>
 
               {/* Call to Actions */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.65, delay: 0.45, ease: framerEase }}
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2"
+              >
                 <button
                   onClick={generateResumePDF}
-                  className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white text-sm font-bold shadow-lg shadow-teal-500/25 transition cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                  className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-sm font-bold shadow-lg shadow-emerald-600/25 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
                 >
                   <Download className="w-4 h-4" />
                   <span>Download Resume (PDF)</span>
@@ -301,45 +367,50 @@ export default function App() {
 
                 <button
                   onClick={() => setIsResumeModalOpen(true)}
-                  className="flex items-center gap-2 px-5 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-semibold transition cursor-pointer shadow-sm"
+                  className="flex items-center gap-2 px-5 py-3 rounded-2xl border border-stone-300 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 hover:bg-white dark:hover:bg-zinc-800 text-stone-800 dark:text-zinc-200 text-sm font-semibold transition-all duration-300 hover:scale-[1.02] shadow-xs cursor-pointer"
                 >
-                  <Eye className="w-4 h-4 text-teal-500" />
+                  <Eye className="w-4 h-4 text-emerald-500" />
                   <span>View Full Resume</span>
                 </button>
 
                 <a
                   href="#contact"
-                  className="flex items-center gap-2 px-4 py-3 rounded-2xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-sm font-semibold transition"
+                  className="flex items-center gap-2 px-4 py-3 rounded-2xl text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-white text-sm font-semibold transition-colors"
                 >
                   <Mail className="w-4 h-4" />
                   <span>Contact Me</span>
                 </a>
-              </div>
+              </motion.div>
 
               {/* Quick links & contact info */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800/80">
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-teal-500" />
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.7, delay: 0.55 }}
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4 text-xs text-stone-500 dark:text-zinc-400 border-t border-stone-200 dark:border-zinc-800/80"
+              >
+                <span className="flex items-center gap-1.5 font-medium">
+                  <MapPin className="w-3.5 h-3.5 text-emerald-500" />
                   {PROFILE_DATA.location}
                 </span>
-                <span className="flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-teal-500" />
+                <span className="flex items-center gap-1.5 font-medium">
+                  <Phone className="w-3.5 h-3.5 text-emerald-500" />
                   {PROFILE_DATA.phone}
                 </span>
                 <a
                   href={PROFILE_DATA.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-teal-500 transition"
+                  className="flex items-center gap-1 text-stone-600 dark:text-zinc-300 hover:text-emerald-500 transition-colors"
                 >
-                  <Linkedin className="w-3.5 h-3.5 text-cyan-500" />
+                  <Linkedin className="w-3.5 h-3.5 text-emerald-500" />
                   LinkedIn
                 </a>
                 <a
                   href={PROFILE_DATA.github}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-teal-500 transition"
+                  className="flex items-center gap-1 text-stone-600 dark:text-zinc-300 hover:text-emerald-500 transition-colors"
                 >
                   <Github className="w-3.5 h-3.5" />
                   GitHub
@@ -348,106 +419,137 @@ export default function App() {
                   href={PROFILE_DATA.tableau}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-teal-500 transition"
+                  className="flex items-center gap-1 text-stone-600 dark:text-zinc-300 hover:text-amber-500 transition-colors"
                 >
                   <BarChart3 className="w-3.5 h-3.5 text-amber-500" />
                   Tableau Public
                 </a>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Right Column: Photograph & Stat Highlights */}
-            <div className="lg:col-span-5 flex flex-col items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: framerEase }}
+              className="lg:col-span-5 flex flex-col items-center justify-center"
+            >
               <AvatarProfile size="lg" showControls={true} />
 
               {/* Quick credential cards */}
               <div className="grid grid-cols-2 gap-3 mt-6 w-full max-w-sm">
-                <div className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center">
-                  <span className="text-xs text-slate-400 block font-medium">Mentorship</span>
-                  <span className="text-sm font-bold text-slate-900 dark:text-white">Intel Training</span>
-                  <span className="text-[10px] text-teal-500 block font-mono">Summer 2026</span>
-                </div>
-                <div className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center">
-                  <span className="text-xs text-slate-400 block font-medium">Education</span>
-                  <span className="text-sm font-bold text-slate-900 dark:text-white">MCA (AI/ML)</span>
-                  <span className="text-[10px] text-teal-500 block font-mono">2025–2027 (Pursuing)</span>
-                </div>
-                <div className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center">
-                  <span className="text-xs text-slate-400 block font-medium">Domain Focus</span>
-                  <span className="text-sm font-bold text-slate-900 dark:text-white">Data Analytics</span>
-                  <span className="text-[10px] text-slate-400 block">Tableau & Python</span>
-                </div>
-                <div className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center">
-                  <span className="text-xs text-slate-400 block font-medium">Opportunities</span>
+                <motion.div
+                  whileHover={{ y: -3 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-3.5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-stone-200 dark:border-zinc-800 shadow-xs text-center backdrop-blur-md"
+                >
+                  <span className="text-xs text-stone-400 dark:text-zinc-400 block font-medium">Mentorship</span>
+                  <span className="text-sm font-bold text-stone-900 dark:text-white">Intel Training</span>
+                  <span className="text-[10px] text-emerald-500 block font-mono font-semibold">Summer 2026</span>
+                </motion.div>
+                <motion.div
+                  whileHover={{ y: -3 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-3.5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-stone-200 dark:border-zinc-800 shadow-xs text-center backdrop-blur-md"
+                >
+                  <span className="text-xs text-stone-400 dark:text-zinc-400 block font-medium">Education</span>
+                  <span className="text-sm font-bold text-stone-900 dark:text-white">MCA (AI/ML)</span>
+                  <span className="text-[10px] text-emerald-500 block font-mono font-semibold">2025–2027 (Pursuing)</span>
+                </motion.div>
+                <motion.div
+                  whileHover={{ y: -3 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-3.5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-stone-200 dark:border-zinc-800 shadow-xs text-center backdrop-blur-md"
+                >
+                  <span className="text-xs text-stone-400 dark:text-zinc-400 block font-medium">Domain Focus</span>
+                  <span className="text-sm font-bold text-stone-900 dark:text-white">Data Analytics</span>
+                  <span className="text-[10px] text-amber-500 block font-semibold">Tableau & Python</span>
+                </motion.div>
+                <motion.div
+                  whileHover={{ y: -3 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-3.5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-stone-200 dark:border-zinc-800 shadow-xs text-center backdrop-blur-md"
+                >
+                  <span className="text-xs text-stone-400 dark:text-zinc-400 block font-medium">Opportunities</span>
                   <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">Open for Roles</span>
-                  <span className="text-[10px] text-slate-400 block">AI/ML & Analytics</span>
-                </div>
+                  <span className="text-[10px] text-stone-500 dark:text-zinc-400 block font-medium">AI/ML & Analytics</span>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* PROJECTS SECTION */}
-      <section id="projects" className="py-16 md:py-24 border-b border-slate-200 dark:border-slate-800/60">
+      <section id="projects" className="py-16 md:py-28 border-b border-stone-200/70 dark:border-zinc-800/60 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.65, ease: framerEase }}
+            className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12"
+          >
             <div>
-              <div className="flex items-center gap-2 text-teal-600 dark:text-teal-400 text-xs font-bold tracking-wider uppercase mb-1">
+              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-bold tracking-wider uppercase mb-1">
                 <Code2 className="w-4 h-4" />
                 Featured Engineering Projects
               </div>
-              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">
+              <h2 className="text-3xl sm:text-4xl font-black text-stone-900 dark:text-white tracking-tight">
                 Applied AI & Machine Learning Systems
               </h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-2xl">
-                Real-world solutions combining edge computer vision, automated generative AI prompts, predictive routing, and executive business analytics.
+              <p className="text-sm text-stone-500 dark:text-zinc-400 mt-1 max-w-2xl">
+                Real-world solutions combining edge computer vision, automated ML pipelines, predictive routing, and executive business analytics.
               </p>
             </div>
 
             {/* Filter buttons */}
-            <div className="flex flex-wrap gap-1.5 p-1 rounded-xl bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 self-start md:self-auto text-xs">
+            <div className="flex flex-wrap gap-1.5 p-1 rounded-2xl bg-stone-200/70 dark:bg-zinc-900 border border-stone-300 dark:border-zinc-800 self-start md:self-auto text-xs">
               {['All', 'Computer Vision', 'Generative AI', 'Machine Learning', 'Data Analytics'].map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`px-3 py-1.5 rounded-lg font-medium transition cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl font-medium transition-all duration-200 cursor-pointer ${
                     activeCategory === cat
-                      ? 'bg-teal-500 text-white shadow-sm font-semibold'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-emerald-600 text-white shadow-xs font-semibold'
+                      : 'text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-white'
                   }`}
                 >
                   {cat}
                 </button>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Project Cards Grid */}
+          {/* Project Cards Grid with Framer Stagger */}
           <div className="space-y-10">
-            {filteredProjects.map((project) => (
-              <div
+            {filteredProjects.map((project, index) => (
+              <motion.div
                 key={project.id}
-                className="rounded-3xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden transition duration-300 hover:border-teal-500/50"
+                initial={{ opacity: 0, y: 35 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.65, delay: index * 0.1, ease: framerEase }}
+                className="rounded-3xl bg-white/80 dark:bg-zinc-900/80 border border-stone-200/80 dark:border-zinc-800/80 shadow-xl overflow-hidden transition-all duration-500 hover:border-emerald-500/50 hover:shadow-[0_0_35px_rgba(16,185,129,0.12)] backdrop-blur-md"
               >
                 <div className="p-6 sm:p-8">
                   {/* Header info */}
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-600 dark:text-teal-400 font-semibold border border-teal-500/20">
+                        <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold border border-emerald-500/20">
                           {project.category}
                         </span>
                         {project.badge && (
-                          <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-semibold border border-indigo-500/20">
+                          <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 font-semibold border border-amber-500/20">
                             ★ {project.badge}
                           </span>
                         )}
                       </div>
-                      <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                      <h3 className="text-xl sm:text-2xl font-bold text-stone-900 dark:text-white">
                         {project.title}
                       </h3>
-                      <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                      <p className="text-xs sm:text-sm text-stone-500 dark:text-zinc-400">
                         {project.subtitle}
                       </p>
                     </div>
@@ -459,11 +561,11 @@ export default function App() {
                           href={project.githubUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 transition"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-300 dark:border-zinc-700 bg-stone-100 dark:bg-zinc-800 hover:bg-stone-200 dark:hover:bg-zinc-700 text-xs font-semibold text-stone-700 dark:text-zinc-200 transition-colors"
                         >
                           <Github className="w-3.5 h-3.5" />
                           <span>Code Repository</span>
-                          <ExternalLink className="w-3 h-3 text-slate-400" />
+                          <ArrowUpRight className="w-3 h-3 text-stone-400" />
                         </a>
                       )}
                       {project.tableauUrl && (
@@ -471,11 +573,11 @@ export default function App() {
                           href={project.tableauUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-xs font-semibold text-amber-600 dark:text-amber-400 transition"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-xs font-semibold text-amber-600 dark:text-amber-400 transition-colors"
                         >
                           <BarChart3 className="w-3.5 h-3.5" />
                           <span>View on Tableau Public</span>
-                          <ExternalLink className="w-3 h-3 text-amber-400" />
+                          <ArrowUpRight className="w-3 h-3 text-amber-500" />
                         </a>
                       )}
                     </div>
@@ -484,20 +586,20 @@ export default function App() {
                   {/* Bullet Highlights */}
                   <div className="mt-5 space-y-2">
                     {project.bullets.map((bullet, i) => (
-                      <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
-                        <span className="w-1.5 h-1.5 rounded-full bg-teal-500 mt-2 flex-shrink-0"></span>
+                      <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-stone-600 dark:text-zinc-300">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 flex-shrink-0"></span>
                         <p className="leading-relaxed">{bullet}</p>
                       </div>
                     ))}
                   </div>
 
                   {/* Tech stack tags */}
-                  <div className="mt-5 flex flex-wrap items-center gap-1.5 pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                    <span className="text-[11px] text-slate-400 font-semibold mr-1">Architecture Stack:</span>
+                  <div className="mt-5 flex flex-wrap items-center gap-1.5 pt-4 border-t border-stone-100 dark:border-zinc-800/80">
+                    <span className="text-[11px] text-stone-400 dark:text-zinc-500 font-semibold mr-1">Architecture Stack:</span>
                     {project.techStack.map((tech, i) => (
                       <span
                         key={i}
-                        className="text-[11px] font-mono px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
+                        className="text-[11px] font-mono px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-zinc-800 text-stone-700 dark:text-zinc-300 border border-stone-200 dark:border-zinc-700/80"
                       >
                         {tech}
                       </span>
@@ -509,66 +611,79 @@ export default function App() {
                   {project.simulationType === 'resume-generator' && <ResumeGeneratorSimulator />}
                   {project.simulationType === 'route-optimizer' && <SmartRouteSimulator />}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* EXPERIENCE SECTION */}
-      <section id="experience" className="py-16 md:py-24 border-b border-slate-200 dark:border-slate-800/60 bg-slate-100/60 dark:bg-slate-900/40">
+      <section id="experience" className="py-16 md:py-28 border-b border-stone-200/70 dark:border-zinc-800/60 bg-stone-100/50 dark:bg-zinc-900/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12">
-            <div className="flex items-center gap-2 text-teal-600 dark:text-teal-400 text-xs font-bold tracking-wider uppercase mb-1">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: framerEase }}
+            className="mb-12"
+          >
+            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-bold tracking-wider uppercase mb-1">
               <Cpu className="w-4 h-4" />
               Work History & Professional Mentorship
             </div>
-            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">
+            <h2 className="text-3xl sm:text-4xl font-black text-stone-900 dark:text-white tracking-tight">
               Relevant Experience & Fitment
             </h2>
-          </div>
+          </motion.div>
 
-          <div className="relative border-l-2 border-teal-500/30 ml-4 sm:ml-6 space-y-12">
+          <div className="relative border-l-2 border-emerald-500/30 ml-4 sm:ml-6 space-y-12">
             {PROFILE_DATA.experiences.map((exp, idx) => (
-              <div key={idx} className="relative pl-6 sm:pl-8 group">
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: idx * 0.15, ease: framerEase }}
+                className="relative pl-6 sm:pl-8 group"
+              >
                 {/* Timeline node */}
-                <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-teal-500 ring-4 ring-white dark:ring-slate-950 group-hover:scale-125 transition"></div>
+                <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-emerald-500 ring-4 ring-white dark:ring-zinc-950 group-hover:scale-125 transition-transform duration-300"></div>
 
-                <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm">
+                <div className="rounded-3xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 p-6 sm:p-8 shadow-xs backdrop-blur-md">
                   <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-2">
                     <div>
-                      <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                      <h3 className="text-lg sm:text-xl font-bold text-stone-900 dark:text-white">
                         {exp.role}
                       </h3>
-                      <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+                      <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
                         {exp.company}
                       </p>
                     </div>
-                    <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md self-start sm:self-auto">
+                    <span className="text-xs font-mono font-medium text-stone-500 dark:text-zinc-400 bg-stone-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md self-start sm:self-auto">
                       {exp.period}
                     </span>
                   </div>
 
                   <div className="mt-4 space-y-2">
                     {exp.highlights.map((point, i) => (
-                      <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
-                        <CheckCircle2 className="w-4 h-4 text-teal-500 flex-shrink-0 mt-0.5" />
+                      <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-stone-600 dark:text-zinc-300">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
                         <p className="leading-relaxed">{point}</p>
                       </div>
                     ))}
                   </div>
 
                   {exp.link && (
-                    <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                    <div className="mt-4 pt-3 border-t border-stone-100 dark:border-zinc-800">
                       <a
                         href={exp.link.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-600 dark:text-teal-400 hover:underline"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
                       >
                         <BarChart3 className="w-4 h-4" />
                         <span>{exp.link.label}</span>
-                        <ExternalLink className="w-3 h-3" />
+                        <ArrowUpRight className="w-3.5 h-3.5" />
                       </a>
                     </div>
                   )}
@@ -577,43 +692,53 @@ export default function App() {
                     {exp.skills.map((skill, i) => (
                       <span
                         key={i}
-                        className="text-[10px] px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60 font-mono"
+                        className="text-[10px] px-2 py-0.5 rounded-md bg-stone-100 dark:bg-zinc-800 text-stone-600 dark:text-zinc-400 border border-stone-200 dark:border-zinc-700/60 font-mono"
                       >
                         {skill}
                       </span>
                     ))}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* SKILLS SECTION */}
-      <section id="skills" className="py-16 md:py-24 border-b border-slate-200 dark:border-slate-800/60">
+      <section id="skills" className="py-16 md:py-28 border-b border-stone-200/70 dark:border-zinc-800/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="flex items-center justify-center gap-2 text-teal-600 dark:text-teal-400 text-xs font-bold tracking-wider uppercase mb-1">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.65, ease: framerEase }}
+            className="text-center max-w-2xl mx-auto mb-14"
+          >
+            <div className="flex items-center justify-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-bold tracking-wider uppercase mb-1">
               <Layers className="w-4 h-4" />
               Technical & Professional Matrix
             </div>
-            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">
+            <h2 className="text-3xl sm:text-4xl font-black text-stone-900 dark:text-white tracking-tight">
               Skills Aligned to Role Requirements
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2">
-              From frontier model prompt engineering to production vision deployment and executive dashboard design.
+            <p className="text-xs sm:text-sm text-stone-500 dark:text-zinc-400 mt-2">
+              From applied computer vision models to exploratory analytics and agile team execution.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {PROFILE_DATA.skillCategories.map((category, idx) => (
-              <div
+              <motion.div
                 key={idx}
-                className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm"
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: idx * 0.1, ease: framerEase }}
+                className="rounded-3xl bg-white/80 dark:bg-zinc-900/80 border border-stone-200 dark:border-zinc-800 p-6 sm:p-8 shadow-xs backdrop-blur-md"
               >
-                <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white pb-3 mb-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
-                  <Brain className="w-4 h-4 text-teal-500" />
+                <h3 className="text-base sm:text-lg font-bold text-stone-900 dark:text-white pb-3 mb-4 border-b border-stone-100 dark:border-zinc-800 flex items-center gap-2">
+                  <Brain className="w-4 h-4 text-emerald-500" />
                   {category.title}
                 </h3>
 
@@ -621,20 +746,23 @@ export default function App() {
                   {category.skills.map((skill, i) => (
                     <div key={i} className="space-y-1.5">
                       <div className="flex justify-between text-xs font-semibold">
-                        <span className="text-slate-800 dark:text-slate-200">{skill.name}</span>
-                        <span className="font-mono text-teal-600 dark:text-teal-400">{skill.level}%</span>
+                        <span className="text-stone-800 dark:text-zinc-200">{skill.name}</span>
+                        <span className="font-mono text-emerald-600 dark:text-emerald-400">{skill.level}%</span>
                       </div>
-                      {/* Progress bar */}
-                      <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all duration-1000"
-                          style={{ width: `${skill.level}%` }}
-                        ></div>
+                      {/* Animated Progress bar */}
+                      <div className="w-full h-2 rounded-full bg-stone-200 dark:bg-zinc-800 overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${skill.level}%` }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.9, delay: 0.1 * i, ease: framerEase }}
+                          className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-amber-500"
+                        ></motion.div>
                       </div>
                       {skill.tags && (
                         <div className="flex flex-wrap gap-1 mt-1">
                           {skill.tags.map((tag, tIdx) => (
-                            <span key={tIdx} className="text-[9px] font-mono text-slate-400">
+                            <span key={tIdx} className="text-[9px] font-mono text-stone-400 dark:text-zinc-500">
                               #{tag}
                             </span>
                           ))}
@@ -643,23 +771,28 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* EDUCATION & CERTIFICATIONS */}
-      <section id="education" className="py-16 md:py-24 border-b border-slate-200 dark:border-slate-800/60 bg-slate-100/60 dark:bg-slate-900/40">
+      <section id="education" className="py-16 md:py-28 border-b border-stone-200/70 dark:border-zinc-800/60 bg-stone-100/50 dark:bg-zinc-900/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {/* Education */}
-            <div>
-              <div className="flex items-center gap-2 text-teal-600 dark:text-teal-400 text-xs font-bold tracking-wider uppercase mb-1">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.65, ease: framerEase }}
+            >
+              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-bold tracking-wider uppercase mb-1">
                 <GraduationCap className="w-4 h-4" />
                 Academic Background
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-6">
+              <h2 className="text-2xl sm:text-3xl font-black text-stone-900 dark:text-white mb-6">
                 Education
               </h2>
 
@@ -667,39 +800,44 @@ export default function App() {
                 {PROFILE_DATA.education.map((edu, idx) => (
                   <div
                     key={idx}
-                    className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm"
+                    className="p-6 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs backdrop-blur-md"
                   >
                     <div className="flex justify-between items-start gap-2">
-                      <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                      <h3 className="text-base font-bold text-stone-900 dark:text-white">
                         {edu.degree}
                       </h3>
-                      <span className="text-xs font-mono text-teal-600 dark:text-teal-400 font-semibold px-2 py-0.5 rounded bg-teal-500/10 whitespace-nowrap">
+                      <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold px-2 py-0.5 rounded bg-emerald-500/10 whitespace-nowrap">
                         {edu.period}
                       </span>
                     </div>
-                    <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mt-1">
+                    <p className="text-xs font-semibold text-stone-600 dark:text-zinc-300 mt-1">
                       {edu.institution}
                     </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                    <p className="text-xs text-stone-500 dark:text-zinc-400 mt-2">
                       {edu.status}
                     </p>
                     {edu.gradeOrFocus && (
-                      <p className="text-xs font-medium text-slate-700 dark:text-slate-300/80 mt-1 pt-2 border-t border-slate-100 dark:border-slate-800">
+                      <p className="text-xs font-medium text-stone-700 dark:text-zinc-300/80 mt-1 pt-2 border-t border-stone-100 dark:border-zinc-800">
                         {edu.gradeOrFocus}
                       </p>
                     )}
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
             {/* Certifications */}
-            <div>
-              <div className="flex items-center gap-2 text-teal-600 dark:text-teal-400 text-xs font-bold tracking-wider uppercase mb-1">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.65, delay: 0.15, ease: framerEase }}
+            >
+              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-bold tracking-wider uppercase mb-1">
                 <Award className="w-4 h-4" />
                 Industry Credentials
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-6">
+              <h2 className="text-2xl sm:text-3xl font-black text-stone-900 dark:text-white mb-6">
                 Certifications
               </h2>
 
@@ -707,90 +845,96 @@ export default function App() {
                 {PROFILE_DATA.certifications.map((cert, idx) => (
                   <div
                     key={idx}
-                    className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm"
+                    className="p-6 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs backdrop-blur-md"
                   >
                     <div className="flex justify-between items-start gap-2">
-                      <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                      <h3 className="text-base font-bold text-stone-900 dark:text-white">
                         {cert.name}
                       </h3>
                       <span className="text-xs font-mono text-amber-500 font-semibold px-2 py-0.5 rounded bg-amber-500/10">
                         {cert.year}
                       </span>
                     </div>
-                    <p className="text-xs font-semibold text-teal-600 dark:text-teal-400 mt-1">
+                    <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1">
                       Issuer: {cert.issuer}
                     </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                    <p className="text-xs text-stone-500 dark:text-zinc-400 mt-2 leading-relaxed">
                       {cert.description}
                     </p>
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* CONTACT & RECRUITER INQUIRY SECTION */}
-      <section id="contact" className="py-16 md:py-24 border-b border-slate-200 dark:border-slate-800/60">
+      <section id="contact" className="py-16 md:py-28 border-b border-stone-200/70 dark:border-zinc-800/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             {/* Contact Details */}
-            <div className="lg:col-span-5 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: -25 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.65, ease: framerEase }}
+              className="lg:col-span-5 space-y-6"
+            >
               <div>
-                <div className="flex items-center gap-2 text-teal-600 dark:text-teal-400 text-xs font-bold tracking-wider uppercase mb-1">
+                <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-bold tracking-wider uppercase mb-1">
                   <Mail className="w-4 h-4" />
                   Direct Channels
                 </div>
-                <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                <h2 className="text-3xl font-black text-stone-900 dark:text-white">
                   Get in Touch
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2">
-                  Interested in discussing AI engineering, Generative AI evaluation, or full-time opportunities? Feel free to connect directly.
+                <p className="text-xs sm:text-sm text-stone-500 dark:text-zinc-400 mt-2">
+                  Interested in discussing AI/ML engineering, data analytics, or full-time opportunities? Feel free to connect directly.
                 </p>
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                <div className="flex items-center justify-between p-4 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs">
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400">
+                    <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                       <Mail className="w-4 h-4" />
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 uppercase font-semibold block">Email Address</span>
-                      <a href={`mailto:${PROFILE_DATA.email}`} className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white hover:text-teal-500 transition">
+                      <span className="text-[10px] text-stone-400 dark:text-zinc-400 uppercase font-semibold block">Email Address</span>
+                      <a href={`mailto:${PROFILE_DATA.email}`} className="text-xs sm:text-sm font-bold text-stone-900 dark:text-white hover:text-emerald-500 transition-colors">
                         {PROFILE_DATA.email}
                       </a>
                     </div>
                   </div>
                   <button
                     onClick={handleCopyEmail}
-                    className="p-2 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                    className="p-2 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
                     title="Copy Email"
                   >
                     {copiedEmail ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
                   </button>
                 </div>
 
-                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-                  <div className="p-2.5 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400">
+                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs">
+                  <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                     <Phone className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Phone</span>
-                    <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
+                    <span className="text-[10px] text-stone-400 dark:text-zinc-400 uppercase font-semibold block">Phone</span>
+                    <span className="text-xs sm:text-sm font-bold text-stone-900 dark:text-white">
                       {PROFILE_DATA.phone}
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-                  <div className="p-2.5 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400">
+                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs">
+                  <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                     <MapPin className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Location</span>
-                    <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
+                    <span className="text-[10px] text-stone-400 dark:text-zinc-400 uppercase font-semibold block">Location</span>
+                    <span className="text-xs sm:text-sm font-bold text-stone-900 dark:text-white">
                       {PROFILE_DATA.location}
                     </span>
                   </div>
@@ -803,16 +947,16 @@ export default function App() {
                   href={PROFILE_DATA.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-cyan-500 hover:text-cyan-500 transition"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 text-xs font-semibold text-stone-700 dark:text-zinc-200 hover:border-emerald-500 hover:text-emerald-500 transition-all shadow-xs"
                 >
-                  <Linkedin className="w-4 h-4 text-cyan-500" />
+                  <Linkedin className="w-4 h-4 text-emerald-500" />
                   <span>LinkedIn Profile</span>
                 </a>
                 <a
                   href={PROFILE_DATA.github}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-teal-500 hover:text-teal-500 transition"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 text-xs font-semibold text-stone-700 dark:text-zinc-200 hover:border-emerald-500 hover:text-emerald-500 transition-all shadow-xs"
                 >
                   <Github className="w-4 h-4" />
                   <span>GitHub Repositories</span>
@@ -821,65 +965,71 @@ export default function App() {
                   href={PROFILE_DATA.tableau}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-amber-500 hover:text-amber-500 transition"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 text-xs font-semibold text-stone-700 dark:text-zinc-200 hover:border-amber-500 hover:text-amber-500 transition-all shadow-xs"
                 >
                   <BarChart3 className="w-4 h-4 text-amber-500" />
                   <span>Tableau Vizzes</span>
                 </a>
               </div>
-            </div>
+            </motion.div>
 
             {/* Recruiter Instant Message Form */}
-            <div className="lg:col-span-7">
-              <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xl">
-                <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
+            <motion.div
+              initial={{ opacity: 0, x: 25 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.65, ease: framerEase }}
+              className="lg:col-span-7"
+            >
+              <div className="rounded-3xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 p-6 sm:p-8 shadow-xl backdrop-blur-md">
+                <div className="flex items-center justify-between pb-4 mb-4 border-b border-stone-100 dark:border-zinc-800">
                   <div>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                    <h3 className="text-lg font-bold text-stone-900 dark:text-white">
                       Direct Recruiter Inquiry
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-stone-500 dark:text-zinc-400">
                       Dispatches directly to {PROFILE_DATA.email}
                     </p>
                   </div>
-                  <span className="text-[10px] font-mono text-teal-600 dark:text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded font-semibold">
                     Response &lt; 24h
                   </span>
                 </div>
 
                 <form onSubmit={handleSendMessage} className="space-y-4">
                   <div>
-                    <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">
+                    <label className="text-xs font-semibold text-stone-700 dark:text-zinc-300 block mb-1">
                       Subject / Role Title
                     </label>
                     <input
                       type="text"
                       value={contactSubject}
                       onChange={(e) => setContactSubject(e.target.value)}
-                      placeholder="e.g. AI/ML Engineering Opportunity at [Company]"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-teal-500"
+                      placeholder="e.g. AI/ML & Data Analytics Opportunity at [Company]"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 dark:bg-zinc-950 border border-stone-200 dark:border-zinc-800 text-xs sm:text-sm text-stone-900 dark:text-white focus:outline-none focus:border-emerald-500 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">
+                    <label className="text-xs font-semibold text-stone-700 dark:text-zinc-300 block mb-1">
                       Message
                     </label>
                     <textarea
                       rows={4}
                       value={contactMessage}
                       onChange={(e) => setContactMessage(e.target.value)}
-                      placeholder="Hi Arshdeep, we came across your AI portfolio and would love to schedule a preliminary conversation regarding..."
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-teal-500 resize-none"
+                      placeholder="Hi Arshdeep, we came across your AI/ML portfolio and would love to schedule a preliminary conversation regarding..."
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 dark:bg-zinc-950 border border-stone-200 dark:border-zinc-800 text-xs sm:text-sm text-stone-900 dark:text-white focus:outline-none focus:border-emerald-500 transition-colors resize-none"
                     ></textarea>
                   </div>
 
                   <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                    <span className="text-[11px] text-slate-400">
+                    <span className="text-[11px] text-stone-400 dark:text-zinc-500">
                       Zero backend required: opens your default email client.
                     </span>
                     <button
                       type="submit"
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-600 text-white text-xs font-bold shadow-md shadow-teal-500/20 transition cursor-pointer"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/25 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
                     >
                       <Send className="w-3.5 h-3.5" />
                       <span>{contactSent ? 'Draft Dispatched!' : 'Send Email Message'}</span>
@@ -887,16 +1037,16 @@ export default function App() {
                   </div>
                 </form>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="py-10 bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
+      <footer className="py-10 bg-white dark:bg-zinc-950 border-t border-stone-200 dark:border-zinc-800 text-xs text-stone-500 dark:text-zinc-400">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-900 dark:text-white">Arshdeep Kaur</span>
+            <span className="font-bold text-stone-900 dark:text-white">Arshdeep Kaur</span>
             <span>·</span>
             <span>AI & ML Graduate</span>
           </div>
@@ -904,7 +1054,7 @@ export default function App() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsGitHubModalOpen(true)}
-              className="hover:text-teal-500 transition flex items-center gap-1 cursor-pointer"
+              className="hover:text-emerald-500 transition-colors flex items-center gap-1 cursor-pointer"
             >
               <Globe className="w-3.5 h-3.5" />
               <span>GitHub Pages Free Hosting Guide</span>
@@ -912,7 +1062,7 @@ export default function App() {
             <span>·</span>
             <button
               onClick={generateResumePDF}
-              className="hover:text-teal-500 transition cursor-pointer"
+              className="hover:text-emerald-500 transition-colors cursor-pointer"
             >
               Download PDF Resume
             </button>

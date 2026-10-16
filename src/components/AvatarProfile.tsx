@@ -62,7 +62,7 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
 
   return (
     <div className={`relative group ${className}`}>
-      <div className={`${sizeClasses} relative rounded-3xl overflow-hidden border-2 border-teal-500/30 dark:border-teal-400/30 bg-gradient-to-b from-slate-800 to-slate-950 shadow-2xl shadow-teal-500/10 flex items-center justify-center transition duration-300 group-hover:border-teal-400/60`}>
+      <div className={`${sizeClasses} relative rounded-3xl overflow-hidden border-2 border-emerald-500/30 dark:border-emerald-500/40 bg-gradient-to-b from-stone-100 to-stone-200 dark:from-zinc-900 dark:to-zinc-950 shadow-2xl shadow-emerald-500/10 flex items-center justify-center transition duration-500 group-hover:border-emerald-400/80 group-hover:shadow-[0_0_35px_rgba(16,185,129,0.2)]`}>
         {customPhoto ? (
           <img
             src={customPhoto}
@@ -164,17 +164,17 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
         )}
 
         {/* Live Availability Badge */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-md border border-teal-500/30 text-[10px] font-semibold text-teal-300">
-          <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
+        <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-950/80 backdrop-blur-md border border-emerald-500/30 text-[10px] font-semibold text-emerald-300">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span>Open for Roles (AI/ML & Analytics)</span>
         </div>
 
         {/* Change Photo Controls */}
         {showControls && (
-          <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-3 text-center">
+          <div className="absolute inset-0 bg-zinc-950/75 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 p-3 text-center">
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-500 hover:bg-teal-600 text-white text-xs font-semibold shadow-lg shadow-teal-500/25 transition cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-lg shadow-emerald-600/30 transition cursor-pointer"
             >
               <Upload className="w-3.5 h-3.5" />
               <span>{customPhoto ? 'Change Photo' : 'Upload Photo'}</span>
@@ -182,13 +182,13 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
             {customPhoto && (
               <button
                 onClick={handleReset}
-                className="flex items-center gap-1 text-[11px] text-slate-300 hover:text-white transition"
+                className="flex items-center gap-1 text-[11px] text-zinc-300 hover:text-white transition"
               >
                 <RefreshCw className="w-3 h-3" />
                 <span>Reset to Illustration</span>
               </button>
             )}
-            <p className="text-[10px] text-slate-300 mt-1 max-w-[150px]">
+            <p className="text-[10px] text-zinc-300 mt-1 max-w-[150px]">
               Upload any JPG/PNG headshot (persisted locally)
             </p>
           </div>
@@ -204,7 +204,7 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
       </div>
 
       {/* Decorative ambient ring glow */}
-      <div className="absolute -inset-1.5 -z-10 rounded-3xl bg-gradient-to-tr from-teal-500/20 via-cyan-500/10 to-indigo-500/20 blur-md opacity-75 group-hover:opacity-100 transition"></div>
+      <div className="absolute -inset-2 -z-10 rounded-3xl bg-gradient-to-tr from-emerald-500/25 via-emerald-600/15 to-amber-500/20 blur-xl opacity-70 group-hover:opacity-100 transition duration-500"></div>
     </div>
   );
 };
