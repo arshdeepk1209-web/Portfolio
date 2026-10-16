@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera, RefreshCw, Sparkles, Upload } from 'lucide-react';
+import { Camera, RefreshCw, Sparkles, Upload, Check } from 'lucide-react';
+import defaultProfilePhoto from '../assets/arshdeep-profile.jpg';
 
 interface AvatarProfileProps {
   className?: string;
@@ -12,17 +13,36 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
   size = 'lg',
   showControls = true
 }) => {
-  const [customPhoto, setCustomPhoto] = useState<string | null>(null);
+  const [photoSrc, setPhotoSrc] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('arshdeep_custom_photo');
+      return saved || defaultProfilePhoto;
+    } catch {
+      return defaultProfilePhoto;
+    }
+  });
+  const [hasCustomPhoto, setHasCustomPhoto] = useState<boolean>(() => {
+    try {
+      return !!localStorage.getItem('arshdeep_custom_photo');
+    } catch {
+      return false;
+    }
+  });
+  const [imageError, setImageError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem('arshdeep_custom_photo');
       if (saved) {
-        setCustomPhoto(saved);
+        setPhotoSrc(saved);
+        setHasCustomPhoto(true);
+      } else {
+        setPhotoSrc(defaultProfilePhoto);
+        setHasCustomPhoto(false);
       }
     } catch {
-      // ignore
+      setPhotoSrc(defaultProfilePhoto);
     }
   }, []);
 
@@ -32,7 +52,9 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
       const reader = new FileReader();
       reader.onload = (event) => {
         const base64 = event.target?.result as string;
-        setCustomPhoto(base64);
+        setPhotoSrc(base64);
+        setHasCustomPhoto(true);
+        setImageError(false);
         try {
           localStorage.setItem('arshdeep_custom_photo', base64);
         } catch {
@@ -43,9 +65,11 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
     }
   };
 
-  const handleReset = (e: React.MouseEvent) => {
+  const handleResetToDefault = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCustomPhoto(null);
+    setPhotoSrc(defaultProfilePhoto);
+    setHasCustomPhoto(false);
+    setImageError(false);
     try {
       localStorage.removeItem('arshdeep_custom_photo');
     } catch {
@@ -56,21 +80,32 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
   const sizeClasses = {
     sm: 'w-12 h-12',
     md: 'w-24 h-24',
-    lg: 'w-44 h-44 sm:w-56 sm:h-56',
+    lg: 'w-48 h-48 sm:w-60 sm:h-60',
     xl: 'w-64 h-64 sm:w-72 sm:h-72'
   }[size];
 
   return (
     <div className={`relative group ${className}`}>
-      <div className={`${sizeClasses} relative rounded-3xl overflow-hidden border-2 border-emerald-500/30 dark:border-emerald-500/40 bg-gradient-to-b from-stone-100 to-stone-200 dark:from-zinc-900 dark:to-zinc-950 shadow-2xl shadow-emerald-500/10 flex items-center justify-center transition duration-500 group-hover:border-emerald-400/80 group-hover:shadow-[0_0_35px_rgba(16,185,129,0.2)]`}>
-        {customPhoto ? (
+      <div
+        className={`${sizeClasses} relative rounded-3xl overflow-hidden border-2 border-emerald-500/30 dark:border-emerald-500/40 bg-gradient-to-b from-stone-100 to-stone-200 dark:from-zinc-900 dark:to-zinc-950 shadow-2xl shadow-emerald-500/10 flex items-center justify-center transition duration-500 group-hover:border-emerald-400/80 group-hover:shadow-[0_0_35px_rgba(16,185,129,0.25)]`}
+      >
+        {!imageError ? (
           <img
-            src={customPhoto}
-            alt="Arshdeep Kaur"
-            className="w-full h-full object-cover object-center"
+            src={photoSrc}
+            alt="Arshdeep Kaur - AI & ML Engineer"
+            onError={() => {
+              // If custom photo failed, fall back to default profile photo
+              if (photoSrc !== defaultProfilePhoto) {
+                setPhotoSrc(defaultProfilePhoto);
+              } else {
+                setImageError(true);
+              }
+            }}
+            loading="eager"
+            className="w-full h-full object-cover object-[center_28%] transition-transform duration-700 group-hover:scale-105 select-none"
           />
         ) : (
-          /* High-fidelity Vector Portrait resembling Arshdeep's profile photo */
+          /* High-fidelity Vector Portrait fallback if image fails to load */
           <svg
             viewBox="0 0 320 380"
             className="w-full h-full object-cover select-none"
@@ -107,7 +142,6 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
 
             {/* Dark Green Textured Cardigan / Sweater */}
             <path d="M30 380 C40 280 80 250 120 240 L160 290 L200 240 C240 250 280 280 290 380 Z" fill="url(#sweaterGrad)" />
-            {/* Cardigan texture speckles */}
             <circle cx="80" cy="310" r="1.5" fill="#042f2e" opacity="0.5" />
             <circle cx="100" cy="330" r="1.5" fill="#042f2e" opacity="0.5" />
             <circle cx="220" cy="320" r="1.5" fill="#042f2e" opacity="0.5" />
@@ -164,12 +198,12 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
         )}
 
         {/* Live Availability Badge */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-950/80 backdrop-blur-md border border-emerald-500/30 text-[10px] font-semibold text-emerald-300">
+        <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-950/85 backdrop-blur-md border border-emerald-500/30 text-[10px] font-semibold text-emerald-300 shadow-md">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span>Open for Roles (AI/ML & Analytics)</span>
         </div>
 
-        {/* Change Photo Controls */}
+        {/* Optional change photo controls on hover */}
         {showControls && (
           <div className="absolute inset-0 bg-zinc-950/75 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 p-3 text-center">
             <button
@@ -177,19 +211,19 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-lg shadow-emerald-600/30 transition cursor-pointer"
             >
               <Upload className="w-3.5 h-3.5" />
-              <span>{customPhoto ? 'Change Photo' : 'Upload Photo'}</span>
+              <span>Update Photo</span>
             </button>
-            {customPhoto && (
+            {hasCustomPhoto && (
               <button
-                onClick={handleReset}
-                className="flex items-center gap-1 text-[11px] text-zinc-300 hover:text-white transition"
+                onClick={handleResetToDefault}
+                className="flex items-center gap-1 text-[11px] text-zinc-300 hover:text-white transition cursor-pointer"
               >
                 <RefreshCw className="w-3 h-3" />
-                <span>Reset to Illustration</span>
+                <span>Reset to Default</span>
               </button>
             )}
-            <p className="text-[10px] text-zinc-300 mt-1 max-w-[150px]">
-              Upload any JPG/PNG headshot (persisted locally)
+            <p className="text-[10px] text-zinc-400 mt-1 max-w-[160px] leading-tight">
+              Permanently set for all visitors
             </p>
           </div>
         )}
