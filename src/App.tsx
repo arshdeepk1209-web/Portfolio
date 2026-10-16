@@ -4,7 +4,10 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ScrollReveal, StaggerContainer, StaggerItem, framerEase } from './components/ScrollReveal';
+import { SectionDivider } from './components/SectionDivider';
+import { ProjectTiltCard } from './components/ProjectTiltCard';
 import { PROFILE_DATA } from './data/profile';
 import { generateResumePDF } from './utils/generateResumePDF';
 import { AvatarProfile } from './components/AvatarProfile';
@@ -111,8 +114,6 @@ export default function App() {
     ? PROFILE_DATA.projects
     : PROFILE_DATA.projects.filter(p => p.category === activeCategory);
 
-  // Framer easing curve
-  const framerEase = [0.16, 1, 0.3, 1] as const;
 
   return (
     <div className={`${darkMode ? 'dark' : ''} min-h-screen bg-stone-50 dark:bg-zinc-950 text-stone-900 dark:text-zinc-100 transition-colors duration-300 relative selection:bg-emerald-500 selection:text-white overflow-x-hidden`}>
@@ -439,8 +440,10 @@ export default function App() {
               {/* Quick credential cards */}
               <div className="grid grid-cols-2 gap-3 mt-6 w-full max-w-sm">
                 <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.35, ease: framerEase }}
                   whileHover={{ y: -3 }}
-                  transition={{ duration: 0.2 }}
                   className="p-3.5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-stone-200 dark:border-zinc-800 shadow-xs text-center backdrop-blur-md"
                 >
                   <span className="text-xs text-stone-400 dark:text-zinc-400 block font-medium">Mentorship</span>
@@ -448,8 +451,10 @@ export default function App() {
                   <span className="text-[10px] text-emerald-500 block font-mono font-semibold">Summer 2026</span>
                 </motion.div>
                 <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.45, ease: framerEase }}
                   whileHover={{ y: -3 }}
-                  transition={{ duration: 0.2 }}
                   className="p-3.5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-stone-200 dark:border-zinc-800 shadow-xs text-center backdrop-blur-md"
                 >
                   <span className="text-xs text-stone-400 dark:text-zinc-400 block font-medium">Education</span>
@@ -457,8 +462,10 @@ export default function App() {
                   <span className="text-[10px] text-emerald-500 block font-mono font-semibold">2025–2027 (Pursuing)</span>
                 </motion.div>
                 <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.55, ease: framerEase }}
                   whileHover={{ y: -3 }}
-                  transition={{ duration: 0.2 }}
                   className="p-3.5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-stone-200 dark:border-zinc-800 shadow-xs text-center backdrop-blur-md"
                 >
                   <span className="text-xs text-stone-400 dark:text-zinc-400 block font-medium">Domain Focus</span>
@@ -466,8 +473,10 @@ export default function App() {
                   <span className="text-[10px] text-amber-500 block font-semibold">Tableau & Python</span>
                 </motion.div>
                 <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.65, ease: framerEase }}
                   whileHover={{ y: -3 }}
-                  transition={{ duration: 0.2 }}
                   className="p-3.5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-stone-200 dark:border-zinc-800 shadow-xs text-center backdrop-blur-md"
                 >
                   <span className="text-xs text-stone-400 dark:text-zinc-400 block font-medium">Opportunities</span>
@@ -521,16 +530,12 @@ export default function App() {
             </div>
           </motion.div>
 
-          {/* Project Cards Grid with Framer Stagger */}
+          {/* Project Cards Grid with Framer Motion 3D Tilt Variants */}
           <div className="space-y-10">
             {filteredProjects.map((project, index) => (
-              <motion.div
+              <ProjectTiltCard
                 key={project.id}
-                initial={{ opacity: 0, y: 35 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.65, delay: index * 0.1, ease: framerEase }}
-                className="rounded-3xl bg-white/80 dark:bg-zinc-900/80 border border-stone-200/80 dark:border-zinc-800/80 shadow-xl overflow-hidden transition-all duration-500 hover:border-emerald-500/50 hover:shadow-[0_0_35px_rgba(16,185,129,0.12)] backdrop-blur-md"
+                index={index}
               >
                 <div className="p-6 sm:p-8">
                   {/* Header info */}
@@ -611,14 +616,17 @@ export default function App() {
                   {project.simulationType === 'resume-generator' && <ResumeGeneratorSimulator />}
                   {project.simulationType === 'route-optimizer' && <SmartRouteSimulator />}
                 </div>
-              </motion.div>
+              </ProjectTiltCard>
             ))}
           </div>
         </div>
       </section>
 
+      {/* SUBTLE HORIZONTAL SECTION DIVIDER */}
+      <SectionDivider />
+
       {/* EXPERIENCE SECTION */}
-      <section id="experience" className="py-16 md:py-28 border-b border-stone-200/70 dark:border-zinc-800/60 bg-stone-100/50 dark:bg-zinc-900/30">
+      <section id="experience" className="py-16 md:py-28 bg-stone-100/50 dark:bg-zinc-900/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -705,8 +713,11 @@ export default function App() {
         </div>
       </section>
 
+      {/* SUBTLE HORIZONTAL SECTION DIVIDER */}
+      <SectionDivider />
+
       {/* SKILLS SECTION */}
-      <section id="skills" className="py-16 md:py-28 border-b border-stone-200/70 dark:border-zinc-800/60">
+      <section id="skills" className="py-16 md:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -777,15 +788,18 @@ export default function App() {
         </div>
       </section>
 
+      {/* SUBTLE HORIZONTAL SECTION DIVIDER */}
+      <SectionDivider />
+
       {/* EDUCATION & CERTIFICATIONS */}
-      <section id="education" className="py-16 md:py-28 border-b border-stone-200/70 dark:border-zinc-800/60 bg-stone-100/50 dark:bg-zinc-900/30">
+      <section id="education" className="py-16 md:py-28 bg-stone-100/50 dark:bg-zinc-900/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {/* Education */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.65, ease: framerEase }}
             >
               <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-bold tracking-wider uppercase mb-1">
@@ -798,9 +812,14 @@ export default function App() {
 
               <div className="space-y-4">
                 {PROFILE_DATA.education.map((edu, idx) => (
-                  <div
+                  <motion.div
                     key={idx}
-                    className="p-6 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs backdrop-blur-md"
+                    initial={{ opacity: 0, y: 25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.55, delay: idx * 0.12, ease: framerEase }}
+                    whileHover={{ y: -3, transition: { duration: 0.2 } }}
+                    className="p-6 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs backdrop-blur-md hover:border-emerald-500/40 hover:shadow-md transition-colors"
                   >
                     <div className="flex justify-between items-start gap-2">
                       <h3 className="text-base font-bold text-stone-900 dark:text-white">
@@ -821,16 +840,16 @@ export default function App() {
                         {edu.gradeOrFocus}
                       </p>
                     )}
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
 
             {/* Certifications */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.65, delay: 0.15, ease: framerEase }}
             >
               <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-bold tracking-wider uppercase mb-1">
@@ -843,9 +862,14 @@ export default function App() {
 
               <div className="space-y-4">
                 {PROFILE_DATA.certifications.map((cert, idx) => (
-                  <div
+                  <motion.div
                     key={idx}
-                    className="p-6 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs backdrop-blur-md"
+                    initial={{ opacity: 0, y: 25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.55, delay: idx * 0.12, ease: framerEase }}
+                    whileHover={{ y: -3, transition: { duration: 0.2 } }}
+                    className="p-6 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs backdrop-blur-md hover:border-amber-500/40 hover:shadow-md transition-colors"
                   >
                     <div className="flex justify-between items-start gap-2">
                       <h3 className="text-base font-bold text-stone-900 dark:text-white">
@@ -861,7 +885,7 @@ export default function App() {
                     <p className="text-xs text-stone-500 dark:text-zinc-400 mt-2 leading-relaxed">
                       {cert.description}
                     </p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
@@ -869,8 +893,11 @@ export default function App() {
         </div>
       </section>
 
+      {/* SUBTLE HORIZONTAL SECTION DIVIDER */}
+      <SectionDivider />
+
       {/* CONTACT & RECRUITER INQUIRY SECTION */}
-      <section id="contact" className="py-16 md:py-28 border-b border-stone-200/70 dark:border-zinc-800/60">
+      <section id="contact" className="py-16 md:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             {/* Contact Details */}
@@ -895,7 +922,14 @@ export default function App() {
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs">
+                <motion.div
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.5, delay: 0.1, ease: framerEase }}
+                  whileHover={{ y: -2, transition: { duration: 0.2 } }}
+                  className="flex items-center justify-between p-4 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs hover:border-emerald-500/40 transition-colors"
+                >
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                       <Mail className="w-4 h-4" />
@@ -914,9 +948,16 @@ export default function App() {
                   >
                     {copiedEmail ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
                   </button>
-                </div>
+                </motion.div>
 
-                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs">
+                <motion.div
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.5, delay: 0.2, ease: framerEase }}
+                  whileHover={{ y: -2, transition: { duration: 0.2 } }}
+                  className="flex items-center gap-3 p-4 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs hover:border-emerald-500/40 transition-colors"
+                >
                   <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                     <Phone className="w-4 h-4" />
                   </div>
@@ -926,9 +967,16 @@ export default function App() {
                       {PROFILE_DATA.phone}
                     </span>
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs">
+                <motion.div
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.5, delay: 0.3, ease: framerEase }}
+                  whileHover={{ y: -2, transition: { duration: 0.2 } }}
+                  className="flex items-center gap-3 p-4 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 shadow-xs hover:border-emerald-500/40 transition-colors"
+                >
                   <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                     <MapPin className="w-4 h-4" />
                   </div>
@@ -938,16 +986,22 @@ export default function App() {
                       {PROFILE_DATA.location}
                     </span>
                   </div>
-                </div>
+                </motion.div>
               </div>
 
               {/* Profiles */}
-              <div className="pt-2 flex flex-wrap gap-2">
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-30px' }}
+                transition={{ duration: 0.5, delay: 0.35, ease: framerEase }}
+                className="pt-2 flex flex-wrap gap-2"
+              >
                 <a
                   href={PROFILE_DATA.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 text-xs font-semibold text-stone-700 dark:text-zinc-200 hover:border-emerald-500 hover:text-emerald-500 transition-all shadow-xs"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 text-xs font-semibold text-stone-700 dark:text-zinc-200 hover:border-emerald-500 hover:text-emerald-500 hover:-translate-y-0.5 transition-all shadow-xs"
                 >
                   <Linkedin className="w-4 h-4 text-emerald-500" />
                   <span>LinkedIn Profile</span>
@@ -956,7 +1010,7 @@ export default function App() {
                   href={PROFILE_DATA.github}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 text-xs font-semibold text-stone-700 dark:text-zinc-200 hover:border-emerald-500 hover:text-emerald-500 transition-all shadow-xs"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 text-xs font-semibold text-stone-700 dark:text-zinc-200 hover:border-emerald-500 hover:text-emerald-500 hover:-translate-y-0.5 transition-all shadow-xs"
                 >
                   <Github className="w-4 h-4" />
                   <span>GitHub Repositories</span>
@@ -965,20 +1019,20 @@ export default function App() {
                   href={PROFILE_DATA.tableau}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 text-xs font-semibold text-stone-700 dark:text-zinc-200 hover:border-amber-500 hover:text-amber-500 transition-all shadow-xs"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 text-xs font-semibold text-stone-700 dark:text-zinc-200 hover:border-amber-500 hover:text-amber-500 hover:-translate-y-0.5 transition-all shadow-xs"
                 >
                   <BarChart3 className="w-4 h-4 text-amber-500" />
                   <span>Tableau Vizzes</span>
                 </a>
-              </div>
+              </motion.div>
             </motion.div>
 
             {/* Recruiter Instant Message Form */}
             <motion.div
-              initial={{ opacity: 0, x: 25 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.65, ease: framerEase }}
+              initial={{ opacity: 0, x: 25, y: 15 }}
+              whileInView={{ opacity: 1, x: 0, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.65, delay: 0.15, ease: framerEase }}
               className="lg:col-span-7"
             >
               <div className="rounded-3xl bg-white/90 dark:bg-zinc-900/90 border border-stone-200 dark:border-zinc-800 p-6 sm:p-8 shadow-xl backdrop-blur-md">
@@ -1043,7 +1097,13 @@ export default function App() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-10 bg-white dark:bg-zinc-950 border-t border-stone-200 dark:border-zinc-800 text-xs text-stone-500 dark:text-zinc-400">
+      <motion.footer
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-20px' }}
+        transition={{ duration: 0.65, ease: framerEase }}
+        className="py-10 bg-white dark:bg-zinc-950 border-t border-stone-200 dark:border-zinc-800 text-xs text-stone-500 dark:text-zinc-400"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="font-bold text-stone-900 dark:text-white">Arshdeep Kaur</span>
@@ -1068,7 +1128,7 @@ export default function App() {
             </button>
           </div>
         </div>
-      </footer>
+      </motion.footer>
     </div>
   );
 }
