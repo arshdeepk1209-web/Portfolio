@@ -78,32 +78,32 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
           >
             <defs>
               <linearGradient id="bgGlow" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#1e293b" />
-                <stop offset="100%" stop-color="#0f172a" />
+                <stop offset="0%" stopColor="#1e293b" />
+                <stop offset="100%" stopColor="#0f172a" />
               </linearGradient>
               <linearGradient id="curtainGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#d4c5b3" />
-                <stop offset="50%" stop-color="#ede3d5" />
-                <stop offset="100%" stop-color="#c9b9a6" />
+                <stop offset="0%" stopColor="#d4c5b3" />
+                <stop offset="50%" stopColor="#ede3d5" />
+                <stop offset="100%" stopColor="#c9b9a6" />
               </linearGradient>
               <linearGradient id="sweaterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#134e4a" />
-                <stop offset="60%" stop-color="#0f766e" />
-                <stop offset="100%" stop-color="#115e59" />
+                <stop offset="0%" stopColor="#134e4a" />
+                <stop offset="60%" stopColor="#0f766e" />
+                <stop offset="100%" stopColor="#115e59" />
               </linearGradient>
               <linearGradient id="skinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#f9d4b6" />
-                <stop offset="100%" stop-color="#ebb995" />
+                <stop offset="0%" stopColor="#f9d4b6" />
+                <stop offset="100%" stopColor="#ebb995" />
               </linearGradient>
               <linearGradient id="hairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#261c16" />
-                <stop offset="100%" stop-color="#150f0c" />
+                <stop offset="0%" stopColor="#261c16" />
+                <stop offset="100%" stopColor="#150f0c" />
               </linearGradient>
             </defs>
 
             {/* Neutral Curtain Backdrop matching photo */}
             <rect width="320" height="380" fill="url(#curtainGrad)" />
-            <path d="M70 0 L70 380 M130 0 L130 380 M200 0 L200 380 M260 0 L260 380" stroke="#bda892" stroke-width="3" opacity="0.4" />
+            <path d="M70 0 L70 380 M130 0 L130 380 M200 0 L200 380 M260 0 L260 380" stroke="#bda892" strokeWidth="3" opacity="0.4" />
 
             {/* Dark Green Textured Cardigan / Sweater */}
             <path d="M30 380 C40 280 80 250 120 240 L160 290 L200 240 C240 250 280 280 290 380 Z" fill="url(#sweaterGrad)" />
@@ -120,9 +120,9 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
             <rect x="132" y="195" width="56" height="50" rx="10" fill="#18181b" />
 
             {/* Silver chain necklace with delicate swan/pendant */}
-            <path d="M140 235 Q160 280 180 235" stroke="#e2e8f0" stroke-width="2" fill="none" />
+            <path d="M140 235 Q160 280 180 235" stroke="#e2e8f0" strokeWidth="2" fill="none" />
             <circle cx="160" cy="265" r="4" fill="#cbd5e1" />
-            <path d="M158 263 L162 267 M162 263 L158 267" stroke="#ffffff" stroke-width="1.5" />
+            <path d="M158 263 L162 267 M162 263 L158 267" stroke="#ffffff" strokeWidth="1.5" />
 
             {/* Neck */}
             <rect x="142" y="170" width="36" height="35" rx="6" fill="url(#skinGrad)" />
@@ -141,8 +141,8 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
             <ellipse cx="210" cy="142" rx="6" ry="11" fill="url(#skinGrad)" />
 
             {/* Eyebrows */}
-            <path d="M126 118 Q138 114 148 117" stroke="#261c16" stroke-width="2.6" stroke-linecap="round" fill="none" />
-            <path d="M172 117 Q182 114 194 118" stroke="#261c16" stroke-width="2.6" stroke-linecap="round" fill="none" />
+            <path d="M126 118 Q138 114 148 117" stroke="#261c16" strokeWidth="2.6" strokeLinecap="round" fill="none" />
+            <path d="M172 117 Q182 114 194 118" stroke="#261c16" strokeWidth="2.6" strokeLinecap="round" fill="none" />
 
             {/* Expressive Warm Eyes */}
             <ellipse cx="137" cy="128" rx="8.5" ry="5.5" fill="#ffffff" />
@@ -151,14 +151,14 @@ export const AvatarProfile: React.FC<AvatarProfileProps> = ({
             <circle cx="183" cy="128" r="4.2" fill="#382417" />
             <circle cx="135.5" cy="126.5" r="1.5" fill="#ffffff" />
             <circle cx="181.5" cy="126.5" r="1.5" fill="#ffffff" />
-            <path d="M128 123 Q137 121 146 123" stroke="#1c1917" stroke-width="1.2" fill="none" />
-            <path d="M174 123 Q183 121 192 123" stroke="#1c1917" stroke-width="1.2" fill="none" />
+            <path d="M128 123 Q137 121 146 123" stroke="#1c1917" strokeWidth="1.2" fill="none" />
+            <path d="M174 123 Q183 121 192 123" stroke="#1c1917" strokeWidth="1.2" fill="none" />
 
             {/* Nose */}
-            <path d="M160 128 L158 147 Q160 152 164 147" stroke="#d99b75" stroke-width="1.8" fill="none" stroke-linecap="round" />
+            <path d="M160 128 L158 147 Q160 152 164 147" stroke="#d99b75" strokeWidth="1.8" fill="none" strokeLinecap="round" />
 
             {/* Friendly Gentle Smile */}
-            <path d="M145 160 Q160 173 175 160" stroke="#b45347" stroke-width="2.5" stroke-linecap="round" fill="none" />
+            <path d="M145 160 Q160 173 175 160" stroke="#b45347" strokeWidth="2.5" strokeLinecap="round" fill="none" />
             <path d="M148 162 Q160 170 172 162" fill="#ffffff" opacity="0.8" />
           </svg>
         )}
