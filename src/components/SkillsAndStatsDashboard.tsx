@@ -146,7 +146,7 @@ const CERTIFICATE_TIMELINE = [
     title: 'Master of Computer Applications (MCA) — AI & ML',
     issuer: 'Chandigarh University',
     type: 'Postgraduate Specialization',
-    status: 'In Progress (65% Complete)',
+    status: 'Currently Pursuing',
     skills: ['Neural Networks', 'Deep Learning', 'Computer Vision', 'Edge AI']
   }
 ];
@@ -554,73 +554,57 @@ export function SkillsAndStatsDashboard() {
               </div>
             </div>
 
-            {/* Practical Learning & Specialization Progress */}
+            {/* Applied Engineering & Domain Highlights */}
             <div className="lg:col-span-6 p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 shadow-xs flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold text-stone-900 dark:text-white">
-                    Active Learning & Specialization Progress
+                    Applied Engineering & Domain Highlights
                   </h3>
-                  <TrendingUp className="w-4 h-4 text-emerald-500" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                 </div>
                 <p className="text-xs text-stone-500 dark:text-zinc-400 mb-5">
-                  Real-time indicators tracking MCA curriculum and hands-on laboratory milestones
+                  Core technical specializations validated through applied project engineering & industry mentorship
                 </p>
 
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex items-center justify-between text-xs font-medium mb-1">
-                      <span className="text-stone-800 dark:text-zinc-200">
-                        MCA AI & Machine Learning Specialization (Chandigarh Univ.)
-                      </span>
-                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">65% Progress</span>
+                <div className="space-y-3.5">
+                  <div className="p-3 rounded-xl bg-stone-50 dark:bg-zinc-800/60 border border-stone-200/70 dark:border-zinc-700/60">
+                    <div className="flex items-center justify-between text-xs font-bold text-stone-900 dark:text-white mb-1">
+                      <span>Edge Computer Vision & Audio Narration</span>
+                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-normal">FastAPI · YOLOv8 · OpenVINO</span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-stone-200 dark:bg-zinc-800 overflow-hidden">
-                      <div className="h-full bg-emerald-500 rounded-full transition-all duration-500" style={{ width: '65%' }}></div>
-                    </div>
+                    <p className="text-[11px] text-stone-600 dark:text-zinc-400 leading-relaxed">
+                      Engineered VAAB for low-latency edge inference with continuous camera loops and multi-language audio narration.
+                    </p>
                   </div>
 
-                  <div>
-                    <div className="flex items-center justify-between text-xs font-medium mb-1">
-                      <span className="text-stone-800 dark:text-zinc-200">
-                        Computer Vision Pipelines (YOLOv8 + Intel OpenVINO)
-                      </span>
-                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">88% Mastery</span>
+                  <div className="p-3 rounded-xl bg-stone-50 dark:bg-zinc-800/60 border border-stone-200/70 dark:border-zinc-700/60">
+                    <div className="flex items-center justify-between text-xs font-bold text-stone-900 dark:text-white mb-1">
+                      <span>Business Intelligence & KPI Forecasting</span>
+                      <span className="text-[10px] text-teal-600 dark:text-teal-400 font-mono font-normal">Tableau Desktop & Public</span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-stone-200 dark:bg-zinc-800 overflow-hidden">
-                      <div className="h-full bg-teal-500 rounded-full transition-all duration-500" style={{ width: '88%' }}></div>
-                    </div>
+                    <p className="text-[11px] text-stone-600 dark:text-zinc-400 leading-relaxed">
+                      Calculated fields, custom geographic mapping, synchronized filters, and predictive clustering developed during Intel Summer Training.
+                    </p>
                   </div>
 
-                  <div>
-                    <div className="flex items-center justify-between text-xs font-medium mb-1">
-                      <span className="text-stone-800 dark:text-zinc-200">
-                        Tableau Desktop & Business Analytics Dashboards
-                      </span>
-                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">92% Mastery</span>
+                  <div className="p-3 rounded-xl bg-stone-50 dark:bg-zinc-800/60 border border-stone-200/70 dark:border-zinc-700/60">
+                    <div className="flex items-center justify-between text-xs font-bold text-stone-900 dark:text-white mb-1">
+                      <span>Predictive Machine Learning & Graph Optimization</span>
+                      <span className="text-[10px] text-blue-600 dark:text-blue-400 font-mono font-normal">Scikit-Learn · Python</span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-stone-200 dark:bg-zinc-800 overflow-hidden">
-                      <div className="h-full bg-blue-500 rounded-full transition-all duration-500" style={{ width: '92%' }}></div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center justify-between text-xs font-medium mb-1">
-                      <span className="text-stone-800 dark:text-zinc-200">
-                        AI Model Evaluation & Response Quality Assurance
-                      </span>
-                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">92% Mastery</span>
-                    </div>
-                    <div className="w-full h-2 rounded-full bg-stone-200 dark:bg-zinc-800 overflow-hidden">
-                      <div className="h-full bg-purple-500 rounded-full transition-all duration-500" style={{ width: '92%' }}></div>
-                    </div>
+                    <p className="text-[11px] text-stone-600 dark:text-zinc-400 leading-relaxed">
+                      Real-time traffic sensor ingestion and shortest-path graph optimization to minimize transit latency and carbon emissions.
+                    </p>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-stone-200 dark:border-zinc-800 flex items-center justify-between text-xs text-stone-500 dark:text-zinc-400">
-                <span>Next Milestone: Advanced Neural Architectures</span>
-                <span className="text-emerald-500 font-semibold">Q3 2026 Target</span>
+              <div className="mt-5 pt-3.5 border-t border-stone-200 dark:border-zinc-800 flex items-center justify-between text-xs text-stone-500 dark:text-zinc-400">
+                <span>Availability: Open for Roles in AI/ML & Analytics</span>
+                <a href="#contact" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
+                  Connect Directly →
+                </a>
               </div>
             </div>
           </div>
