@@ -152,10 +152,9 @@ const CERTIFICATE_TIMELINE = [
 ];
 
 export function SkillsAndStatsDashboard() {
-  const [activeTab, setActiveTab] = useState<'overview' | 'skills' | 'github' | 'tableau' | 'timeline'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'github' | 'timeline'>('overview');
   const [githubData, setGithubData] = useState<GitHubStats>(VERIFIED_GITHUB_DATA);
   const [isLoadingGithub, setIsLoadingGithub] = useState(false);
-  const [showTableauEmbed, setShowTableauEmbed] = useState(false);
 
   // Fetch real GitHub public metrics when component mounts
   useEffect(() => {
@@ -282,17 +281,6 @@ export function SkillsAndStatsDashboard() {
               <span>Overview</span>
             </button>
             <button
-              onClick={() => setActiveTab('skills')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'skills'
-                  ? 'bg-white dark:bg-zinc-800 text-stone-900 dark:text-white shadow-xs'
-                  : 'text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-white'
-              }`}
-            >
-              <Cpu className="w-3.5 h-3.5" />
-              <span>Skills Mastery</span>
-            </button>
-            <button
               onClick={() => setActiveTab('github')}
               className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'github'
@@ -302,17 +290,6 @@ export function SkillsAndStatsDashboard() {
             >
               <Github className="w-3.5 h-3.5" />
               <span>GitHub Live</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('tableau')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'tableau'
-                  ? 'bg-white dark:bg-zinc-800 text-stone-900 dark:text-white shadow-xs'
-                  : 'text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-white'
-              }`}
-            >
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>Tableau BI</span>
             </button>
             <button
               onClick={() => setActiveTab('timeline')}
@@ -491,60 +468,7 @@ export function SkillsAndStatsDashboard() {
           </div>
         )}
 
-        {/* TAB 2: DETAILED SKILLS BREAKDOWN BY CATEGORY */}
-        {activeTab === 'skills' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {PROFILE_DATA.skillCategories.map((category, idx) => (
-              <div
-                key={idx}
-                className="p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 shadow-xs"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-base font-bold text-stone-900 dark:text-white flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    {category.title}
-                  </h3>
-                  <span className="text-xs text-stone-500 dark:text-zinc-400">
-                    {category.skills.length} core competencies
-                  </span>
-                </div>
-
-                <div className="space-y-4">
-                  {category.skills.map((skill, sIdx) => (
-                    <div key={sIdx}>
-                      <div className="flex items-center justify-between text-xs font-medium mb-1">
-                        <span className="text-stone-800 dark:text-zinc-200 font-semibold">
-                          {skill.name}
-                        </span>
-                        <span className="text-emerald-600 dark:text-emerald-400 font-bold">
-                          {skill.level}%
-                        </span>
-                      </div>
-                      <div className="w-full h-2 rounded-full bg-stone-100 dark:bg-zinc-800 overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-emerald-600 to-teal-500 rounded-full transition-all duration-500"
-                          style={{ width: `${skill.level}%` }}
-                        ></div>
-                      </div>
-                      {skill.tags && (
-                        <div className="flex items-center gap-2 mt-1.5 text-[11px] text-stone-500 dark:text-zinc-400">
-                          {skill.tags.map((tag, tIdx) => (
-                            <React.Fragment key={tIdx}>
-                              <span>{tag}</span>
-                              {tIdx < skill.tags!.length - 1 && <span aria-hidden="true">·</span>}
-                            </React.Fragment>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* TAB 3: LIVE GITHUB REPOSITORIES & ACTIVITY */}
+        {/* TAB 2: LIVE GITHUB REPOSITORIES & ACTIVITY */}
         {activeTab === 'github' && (
           <div className="space-y-6">
             <div className="p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -661,118 +585,7 @@ export function SkillsAndStatsDashboard() {
           </div>
         )}
 
-        {/* TAB 4: EMBEDDED TABLEAU PUBLIC BI DASHBOARD */}
-        {activeTab === 'tableau' && (
-          <div className="space-y-6">
-            <div className="p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base font-bold text-stone-900 dark:text-white">
-                    Executive KPI & Business Analytics Suite
-                  </h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800/50">
-                    Tableau Public
-                  </span>
-                </div>
-                <p className="text-xs text-stone-500 dark:text-zinc-400 mt-1">
-                  Engineered during the Intel Summer Training 2026 — featuring calculated metrics, synchronized filters, and predictive clustering.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setShowTableauEmbed(!showTableauEmbed)}
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-colors cursor-pointer"
-                >
-                  <Eye className="w-3.5 h-3.5" />
-                  <span>{showTableauEmbed ? 'Hide Interactive View' : 'Load Interactive Embed'}</span>
-                </button>
-                <a
-                  href="https://public.tableau.com/app/profile/arshdeep.kaur7968/vizzes"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-stone-300 dark:border-zinc-700 hover:bg-stone-100 dark:hover:bg-zinc-800 text-stone-700 dark:text-zinc-200 text-xs font-semibold transition-colors"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span>Open on Tableau Public</span>
-                </a>
-              </div>
-            </div>
-
-            {/* Embedded Interactive Viewer or Preview Card */}
-            {showTableauEmbed ? (
-              <div className="w-full rounded-2xl overflow-hidden border border-stone-200 dark:border-zinc-800 bg-stone-100 dark:bg-zinc-900 shadow-lg">
-                <div className="p-3 bg-stone-200/60 dark:bg-zinc-800/60 text-xs text-stone-600 dark:text-zinc-400 flex items-center justify-between border-b border-stone-300 dark:border-zinc-700">
-                  <span className="font-mono text-[11px]">Tableau Public · Profile @arshdeep.kaur7968</span>
-                  <a
-                    href="https://public.tableau.com/app/profile/arshdeep.kaur7968/vizzes"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
-                  >
-                    Open in full window <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
-                <iframe
-                  src="https://public.tableau.com/app/profile/arshdeep.kaur7968/vizzes"
-                  title="Arshdeep Kaur Tableau Public Visualizations"
-                  className="w-full h-[620px] border-0"
-                  loading="lazy"
-                />
-              </div>
-            ) : (
-              <div className="p-8 rounded-2xl bg-gradient-to-br from-stone-900 via-zinc-900 to-stone-950 text-white border border-zinc-800 shadow-md">
-                <div className="max-w-2xl">
-                  <span className="text-xs uppercase font-bold tracking-widest text-emerald-400 mb-2 block">
-                    Intel Summer Training 2026 Showcase
-                  </span>
-                  <h4 className="text-xl font-bold mb-3">
-                    Multi-Dimensional Business KPI Forecasting & Scorecards
-                  </h4>
-                  <p className="text-xs text-zinc-300 leading-relaxed mb-6">
-                    Interactive dashboards leveraging Tableau Desktop calculated fields, parameter-driven forecasting, geographic mapping, and synchronized drill-downs. Exploratory data analysis executed in Python (Pandas & Matplotlib) mapped directly to stakeholder executive KPI metrics.
-                  </p>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                    <div className="p-3 rounded-xl bg-zinc-800/80 border border-zinc-700/60">
-                      <span className="text-[11px] text-zinc-400 block mb-1">Architecture</span>
-                      <span className="text-sm font-semibold text-white">Tableau Desktop & Public</span>
-                    </div>
-                    <div className="p-3 rounded-xl bg-zinc-800/80 border border-zinc-700/60">
-                      <span className="text-[11px] text-zinc-400 block mb-1">Modeling</span>
-                      <span className="text-sm font-semibold text-white">Clustering & Regression</span>
-                    </div>
-                    <div className="p-3 rounded-xl bg-zinc-800/80 border border-zinc-700/60">
-                      <span className="text-[11px] text-zinc-400 block mb-1">Data Source</span>
-                      <span className="text-sm font-semibold text-white">Relational SQL & CSV</span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-3">
-                    <button
-                      onClick={() => setShowTableauEmbed(true)}
-                      className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md shadow-emerald-600/25 cursor-pointer flex items-center gap-1.5"
-                    >
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>Launch In-Page Interactive Dashboard</span>
-                    </button>
-                    <a
-                      href="https://public.tableau.com/app/profile/arshdeep.kaur7968/vizzes"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold transition-colors flex items-center gap-1.5"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                      <span>Explore on Tableau Public</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* TAB 5: CERTIFICATES & LEARNING PROGRESS TIMELINE */}
+        {/* TAB 3: CERTIFICATES & LEARNING PROGRESS TIMELINE */}
         {activeTab === 'timeline' && (
           <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 shadow-xs">
             <div className="flex items-center justify-between mb-8">
