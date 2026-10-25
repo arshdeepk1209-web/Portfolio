@@ -38,7 +38,7 @@ import {
   ArcElement,
   Filler
 } from 'chart.js';
-import { Bar, Doughnut, Radar } from 'react-chartjs-2';
+import { Bar, Doughnut } from 'react-chartjs-2';
 import { PROFILE_DATA } from '../data/profile';
 
 // Register Chart.js modules
@@ -246,31 +246,6 @@ export function SkillsAndStatsDashboard() {
         backgroundColor: ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b'],
         borderWidth: 2,
         borderColor: '#18181b'
-      }
-    ]
-  };
-
-  // AI & ML Radar Competency Profile Data
-  const radarCompetencyData = {
-    labels: [
-      'Computer Vision',
-      'Data Analytics (BI)',
-      'Model Evaluation & QA',
-      'Python Engineering',
-      'Inference Acceleration',
-      'Team & Communication'
-    ],
-    datasets: [
-      {
-        label: 'Proficiency Level (%)',
-        data: [88, 92, 92, 90, 85, 95],
-        backgroundColor: 'rgba(16, 185, 129, 0.25)',
-        borderColor: '#10b981',
-        pointBackgroundColor: '#10b981',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#10b981',
-        borderWidth: 2
       }
     ]
   };
@@ -511,100 +486,6 @@ export function SkillsAndStatsDashboard() {
                   <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
                   <span>Data Analytics</span>
                 </div>
-              </div>
-            </div>
-
-            {/* Radar Competency Profile */}
-            <div className="lg:col-span-6 p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 shadow-xs">
-              <div className="flex items-center justify-between mb-2">
-                <div>
-                  <h3 className="text-sm font-bold text-stone-900 dark:text-white">
-                    Applied Competency Radar
-                  </h3>
-                  <p className="text-xs text-stone-500 dark:text-zinc-400">
-                    Multidisciplinary evaluation across technical and analytical vectors
-                  </p>
-                </div>
-                <Sparkles className="w-4 h-4 text-emerald-500" />
-              </div>
-              <div className="h-64 sm:h-72">
-                <Radar
-                  data={radarCompetencyData}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                      legend: { display: false }
-                    },
-                    scales: {
-                      r: {
-                        min: 50,
-                        max: 100,
-                        ticks: { stepSize: 15, display: false },
-                        angleLines: { color: 'rgba(113, 113, 122, 0.2)' },
-                        grid: { color: 'rgba(113, 113, 122, 0.2)' },
-                        pointLabels: {
-                          color: '#a1a1aa',
-                          font: { size: 10 }
-                        }
-                      }
-                    }
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Applied Engineering & Domain Highlights */}
-            <div className="lg:col-span-6 p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-bold text-stone-900 dark:text-white">
-                    Applied Engineering & Domain Highlights
-                  </h3>
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                </div>
-                <p className="text-xs text-stone-500 dark:text-zinc-400 mb-5">
-                  Core technical specializations validated through applied project engineering & industry mentorship
-                </p>
-
-                <div className="space-y-3.5">
-                  <div className="p-3 rounded-xl bg-stone-50 dark:bg-zinc-800/60 border border-stone-200/70 dark:border-zinc-700/60">
-                    <div className="flex items-center justify-between text-xs font-bold text-stone-900 dark:text-white mb-1">
-                      <span>Edge Computer Vision & Audio Narration</span>
-                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-normal">FastAPI · YOLOv8 · OpenVINO</span>
-                    </div>
-                    <p className="text-[11px] text-stone-600 dark:text-zinc-400 leading-relaxed">
-                      Engineered VAAB for low-latency edge inference with continuous camera loops and multi-language audio narration.
-                    </p>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-stone-50 dark:bg-zinc-800/60 border border-stone-200/70 dark:border-zinc-700/60">
-                    <div className="flex items-center justify-between text-xs font-bold text-stone-900 dark:text-white mb-1">
-                      <span>Business Intelligence & KPI Forecasting</span>
-                      <span className="text-[10px] text-teal-600 dark:text-teal-400 font-mono font-normal">Tableau Desktop & Public</span>
-                    </div>
-                    <p className="text-[11px] text-stone-600 dark:text-zinc-400 leading-relaxed">
-                      Calculated fields, custom geographic mapping, synchronized filters, and predictive clustering developed during Intel Summer Training.
-                    </p>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-stone-50 dark:bg-zinc-800/60 border border-stone-200/70 dark:border-zinc-700/60">
-                    <div className="flex items-center justify-between text-xs font-bold text-stone-900 dark:text-white mb-1">
-                      <span>Predictive Machine Learning & Graph Optimization</span>
-                      <span className="text-[10px] text-blue-600 dark:text-blue-400 font-mono font-normal">Scikit-Learn · Python</span>
-                    </div>
-                    <p className="text-[11px] text-stone-600 dark:text-zinc-400 leading-relaxed">
-                      Real-time traffic sensor ingestion and shortest-path graph optimization to minimize transit latency and carbon emissions.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-5 pt-3.5 border-t border-stone-200 dark:border-zinc-800 flex items-center justify-between text-xs text-stone-500 dark:text-zinc-400">
-                <span>Availability: Open for Roles in AI/ML & Analytics</span>
-                <a href="#contact" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
-                  Connect Directly →
-                </a>
               </div>
             </div>
           </div>

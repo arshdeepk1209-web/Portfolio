@@ -148,7 +148,6 @@ export const PORTFOLIO_CORPUS: PortfolioChunk[] = [
 - Interactive category breakdown with proficiency meters across Machine Learning, Data Analytics, AI Model QA, and Soft Skills.
 - Tech stack usage frequency chart displaying real project implementations (Python, Tableau, SQL, FastAPI, YOLOv8, OpenVINO, React/TypeScript).
 - Project domain distribution doughnut chart across Computer Vision, Machine Learning, Generative AI, and Data Analytics.
-- Multidisciplinary competency radar profile.
 - Live GitHub integration showing public repositories, commit activity, and language breakdown (58% Python, 24% TypeScript/React, 12% Jupyter Notebook).
 - In-page interactive Tableau Public embed featuring executive KPI scorecards from the Intel Summer Training 2026.
 - Academic and certification chronological timeline.`
