@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MessageSquare,
@@ -16,9 +16,17 @@ import {
   Layers,
   Search,
   Check,
-  Code2
+  Code2,
+  Cpu
 } from 'lucide-react';
 import { askPortfolioAI, RAGResponse, RetrievalResult } from '../utils/ragEngine';
+import {
+  predictNextWords,
+  getInlineGhostAutocomplete,
+  getLSTMTelemetry,
+  NextWordPrediction,
+  LSTMStateTelemetry
+} from '../utils/lstmNextWord';
 
 interface ChatMessage {
   id: string;
@@ -32,21 +40,63 @@ interface ChatMessage {
 }
 
 const SAMPLE_QUESTIONS = [
+  'tell me about your ', // Interactive LSTM Next-Word autocomplete demo
   'What projects has she done in machine learning?',
   'Does she know React?',
   'Tell me about her experience at Intel.',
   'What is her educational background?',
   'What certifications does she hold?',
-  'How can I contact Arshdeep?',
   'What is her favorite food?' // For testing grounding refusal
 ];
 
 export function PortfolioChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [showRAGInfo, setShowRAGInfo] = useState(false);
+  const [showLSTMInspector, setShowLSTMInspector] = useState(false);
   const [inputQuery, setInputQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [expandedCitationId, setExpandedCitationId] = useState<string | null>(null);
+
+  // Compute LSTM next-word predictions and inline ghost completion dynamically
+  const nextWordPredictions = useMemo(() => predictNextWords(inputQuery, 3), [inputQuery]);
+  const ghostAutocomplete = useMemo(() => getInlineGhostAutocomplete(inputQuery), [inputQuery]);
+  const lstmTelemetry = useMemo(() => getLSTMTelemetry(inputQuery), [inputQuery]);
+
+  const handleAcceptNextWord = (word: string) => {
+    let newText = inputQuery;
+    const endsWithSpace = inputQuery.endsWith(' ');
+    if (endsWithSpace || !inputQuery.trim()) {
+      newText = inputQuery + word + ' ';
+    } else {
+      const tokens = inputQuery.split(/\s+/);
+      tokens[tokens.length - 1] = word;
+      newText = tokens.join(' ') + ' ';
+    }
+    setInputQuery(newText);
+    setTimeout(() => inputRef.current?.focus(), 10);
+  };
+
+  const handleAcceptGhost = () => {
+    if (!ghostAutocomplete) return;
+    const newText = inputQuery + ghostAutocomplete + ' ';
+    setInputQuery(newText);
+    setTimeout(() => inputRef.current?.focus(), 10);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Tab' && ghostAutocomplete) {
+      e.preventDefault();
+      handleAcceptGhost();
+    } else if (
+      e.key === 'ArrowRight' &&
+      inputRef.current &&
+      inputRef.current.selectionStart === inputQuery.length &&
+      ghostAutocomplete
+    ) {
+      e.preventDefault();
+      handleAcceptGhost();
+    }
+  };
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -335,12 +385,12 @@ export function PortfolioChatbot() {
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-[11px]">
                     <div className="bg-white/80 dark:bg-zinc-900/80 p-2 rounded border border-emerald-200/60 dark:border-emerald-900/40">
-                      <strong className="text-emerald-700 dark:text-emerald-400 block mb-0.5">1. Text Chunking</strong>
-                      Portfolio split into verified modular knowledge units (Projects, Skills, Intel Internship, Degrees).
+                      <strong className="text-emerald-700 dark:text-emerald-400 block mb-0.5">1. Text Chunking & RAG</strong>
+                      Modular verified knowledge chunks indexed with TF-IDF vectors & Cosine Similarity search.
                     </div>
                     <div className="bg-white/80 dark:bg-zinc-900/80 p-2 rounded border border-emerald-200/60 dark:border-emerald-900/40">
-                      <strong className="text-emerald-700 dark:text-emerald-400 block mb-0.5">2. Embeddings & Search</strong>
-                      TF-IDF term vector projections & Cosine Similarity ranking over semantic queries.
+                      <strong className="text-emerald-700 dark:text-emerald-400 block mb-0.5">2. LSTM Next-Word Model</strong>
+                      Recurrent LSTM sequence model predicting candidate next words & inline ghost autocomplete.
                     </div>
                     <div className="bg-white/80 dark:bg-zinc-900/80 p-2 rounded border border-emerald-200/60 dark:border-emerald-900/40">
                       <strong className="text-emerald-700 dark:text-emerald-400 block mb-0.5">3. Grounded Synthesis</strong>
@@ -456,6 +506,88 @@ export function PortfolioChatbot() {
               <div ref={messagesEndRef} />
             </div>
 
+            {/* LSTM NEXT-WORD SUGGESTIONS & AUTOCOMPLETE BAR */}
+            <div className="px-3 py-1.5 bg-stone-100/90 dark:bg-zinc-950/90 border-t border-stone-200/80 dark:border-zinc-800/80 flex items-center justify-between gap-2 text-xs">
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 shrink-0">
+                  <Cpu className="w-3 h-3" /> LSTM Next-Word:
+                </span>
+                {nextWordPredictions.map((pred, pIdx) => (
+                  <button
+                    key={pIdx}
+                    type="button"
+                    onClick={() => handleAcceptNextWord(pred.word)}
+                    className="px-2 py-0.5 rounded-lg bg-white dark:bg-zinc-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-stone-700 dark:text-zinc-200 border border-stone-200 dark:border-zinc-700 hover:border-emerald-500 text-[11px] font-mono transition-all flex items-center gap-1 cursor-pointer shrink-0 shadow-2xs"
+                  >
+                    <span className="font-semibold">{pred.word}</span>
+                    <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold">
+                      {Math.round(pred.probability * 100)}%
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowLSTMInspector(!showLSTMInspector)}
+                className={`px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 transition-colors cursor-pointer border ${
+                  showLSTMInspector
+                    ? 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800'
+                    : 'text-stone-400 hover:text-stone-700 dark:hover:text-zinc-300 border-transparent hover:border-stone-300 dark:hover:border-zinc-700'
+                }`}
+                title="Inspect recurrent gate activations and hidden state"
+              >
+                LSTM Telemetry
+              </button>
+            </div>
+
+            {/* LSTM TELEMETRY DRAWER */}
+            <AnimatePresence>
+              {showLSTMInspector && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="bg-emerald-950/20 dark:bg-zinc-950/90 border-t border-emerald-200/50 dark:border-emerald-900/40 p-3 text-[11px] font-mono text-stone-700 dark:text-zinc-300 overflow-hidden"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
+                      <Cpu className="w-3.5 h-3.5" /> LSTM Recurrent Cell Telemetry
+                    </span>
+                    <span className="text-[10px] text-stone-500">
+                      Sequence Length: {lstmTelemetry.tokens.length}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 mb-2">
+                    <div className="p-2 rounded bg-white/80 dark:bg-zinc-900/80 border border-stone-200/60 dark:border-zinc-800">
+                      <div className="text-[9px] uppercase tracking-wider text-stone-400">Forget Gate (f_t)</div>
+                      <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                        {lstmTelemetry.activeGateSummary.forget}
+                      </div>
+                    </div>
+                    <div className="p-2 rounded bg-white/80 dark:bg-zinc-900/80 border border-stone-200/60 dark:border-zinc-800">
+                      <div className="text-[9px] uppercase tracking-wider text-stone-400">Input Gate (i_t)</div>
+                      <div className="text-xs font-bold text-teal-600 dark:text-teal-400">
+                        {lstmTelemetry.activeGateSummary.input}
+                      </div>
+                    </div>
+                    <div className="p-2 rounded bg-white/80 dark:bg-zinc-900/80 border border-stone-200/60 dark:border-zinc-800">
+                      <div className="text-[9px] uppercase tracking-wider text-stone-400">Output Gate (o_t)</div>
+                      <div className="text-xs font-bold text-blue-600 dark:text-blue-400">
+                        {lstmTelemetry.activeGateSummary.output}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[10px] text-stone-500 pt-1 border-t border-stone-200/50 dark:border-zinc-800">
+                    <span>||c_t||: {lstmTelemetry.cellStateNorm} · ||h_t||: {lstmTelemetry.hiddenStateNorm}</span>
+                    <span>Softmax over portfolio inquiry vocab</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* QUICK SUGGESTIONS CHIPS */}
             <div className="px-3 py-2 bg-stone-50/80 dark:bg-zinc-950/60 border-t border-stone-200/60 dark:border-zinc-800/60 overflow-x-auto no-scrollbar flex items-center gap-1.5">
               <span className="text-[10px] font-semibold text-stone-400 dark:text-zinc-500 uppercase tracking-wider shrink-0 flex items-center gap-1">
@@ -464,9 +596,12 @@ export function PortfolioChatbot() {
               {SAMPLE_QUESTIONS.map((q, idx) => (
                 <button
                   key={idx}
-                  onClick={() => handleSend(q)}
+                  onClick={() => {
+                    setInputQuery(q);
+                    setTimeout(() => inputRef.current?.focus(), 10);
+                  }}
                   disabled={isLoading}
-                  className="shrink-0 text-xs px-2.5 py-1 rounded-full bg-white dark:bg-zinc-800 text-stone-700 dark:text-zinc-300 border border-stone-200 dark:border-zinc-700 hover:border-emerald-500 dark:hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors shadow-xs cursor-pointer"
+                  className="shrink-0 text-xs px-2.5 py-1 rounded-full bg-white dark:bg-zinc-800 text-stone-700 dark:text-zinc-300 border border-stone-200 dark:border-zinc-700 hover:border-emerald-500 dark:hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors shadow-xs cursor-pointer font-mono"
                 >
                   {q}
                 </button>
@@ -481,15 +616,29 @@ export function PortfolioChatbot() {
               }}
               className="p-3 bg-white dark:bg-zinc-950 border-t border-stone-200 dark:border-zinc-800 flex items-center gap-2"
             >
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputQuery}
-                onChange={e => setInputQuery(e.target.value)}
-                placeholder="Ask about projects, React, skills, Intel training..."
-                disabled={isLoading}
-                className="flex-1 bg-stone-100 dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-stone-900 dark:text-white placeholder-stone-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 transition-all"
-              />
+              <div className="relative flex-1 flex items-center">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={inputQuery}
+                  onChange={e => setInputQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Type 'tell me about your...' or ask anything"
+                  disabled={isLoading}
+                  className="w-full bg-stone-100 dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-stone-900 dark:text-white placeholder-stone-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 transition-all pr-20"
+                />
+                {ghostAutocomplete && (
+                  <button
+                    type="button"
+                    onClick={handleAcceptGhost}
+                    className="absolute right-2 px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/80 hover:bg-emerald-200 dark:hover:bg-emerald-900 text-emerald-800 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/60 text-[10px] font-mono flex items-center gap-1 shadow-2xs transition-colors cursor-pointer"
+                    title="Click or press Tab / → to autocomplete"
+                  >
+                    <span>+{ghostAutocomplete}</span>
+                    <span className="text-[8.5px] uppercase font-bold bg-white/80 dark:bg-zinc-800/80 px-1 rounded">Tab ⇥</span>
+                  </button>
+                )}
+              </div>
               <button
                 type="submit"
                 disabled={!inputQuery.trim() || isLoading}

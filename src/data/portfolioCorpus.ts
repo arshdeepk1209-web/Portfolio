@@ -150,5 +150,16 @@ export const PORTFOLIO_CORPUS: PortfolioChunk[] = [
 - Project domain distribution doughnut chart across Computer Vision, Machine Learning, Generative AI, and Data Analytics.
 - Live GitHub integration showing public repositories, commit activity, and language breakdown (58% Python, 24% TypeScript/React, 12% Jupyter Notebook).
 - Academic credentials and certification chronological timeline.`
+  },
+  {
+    id: 'chatbot-lstm-nlp',
+    title: 'Chatbot LSTM Next-Word Prediction & Sequence Autocomplete',
+    category: 'skill',
+    tags: ['lstm', 'next-word', 'autocomplete', 'rnn', 'recurrent', 'sequence', 'nlp', 'language model', 'suggestions', 'chatbot'],
+    content: `Arshdeep's portfolio chatbot features an integrated LSTM (Long Short-Term Memory) recurrent sequence model for real-time Next-Word Suggestions and Next-Word Autocomplete.
+- Architecture: Recurrent hidden state (h_t) and cell memory state (c_t) with forget, input, and output gates computed in real time.
+- Next-Word Suggestions: As a visitor types (e.g., "tell me about your"), the LSTM predicts top candidate next words (projects 44%, skills 32%, experience 24%) with softmax likelihoods.
+- Inline Ghost Autocomplete: Provides inline ghost text autocompletion that visitors can accept by pressing Tab or clicking the completion badge.
+- Telemetry Inspector: Real-time telemetry visualizer showing recurrent gate activations (f_t, i_t, o_t) and hidden state norms.`
   }
 ];

@@ -71,7 +71,9 @@ const SYNONYMS: Record<string, string[]> = {
   python: ['python', 'pandas', 'numpy', 'scikit-learn', 'matplotlib'],
   nlp: ['resume', 'blip-2', 'generative', 'llm', 'language'],
   stats: ['dashboard', 'analytics', 'charts', 'telemetry', 'github', 'tableau'],
-  dashboard: ['stats', 'analytics', 'charts', 'chart.js', 'github', 'tableau', 'timeline']
+  dashboard: ['stats', 'analytics', 'charts', 'chart.js', 'github', 'tableau', 'timeline'],
+  lstm: ['lstm', 'autocomplete', 'next-word', 'rnn', 'recurrent', 'sequence', 'nlp', 'model'],
+  autocomplete: ['autocomplete', 'lstm', 'next-word', 'suggestions', 'prediction']
 };
 
 /**
