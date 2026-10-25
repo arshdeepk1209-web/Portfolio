@@ -83,6 +83,62 @@ export default defineConfig(() => {
           type: 'module',
         },
       }),
+      {
+        name: 'chat-api-middleware',
+        configureServer(server) {
+          server.middlewares.use('/api/chat', async (req, res) => {
+            if (req.method !== 'POST') {
+              res.statusCode = 405;
+              res.end('Method Not Allowed');
+              return;
+            }
+            let body = '';
+            req.on('data', chunk => { body += chunk; });
+            req.on('end', async () => {
+              try {
+                const { query, retrievedChunks } = JSON.parse(body || '{}');
+                const apiKey = process.env.GEMINI_API_KEY;
+                if (!apiKey) {
+                  res.statusCode = 503;
+                  res.setHeader('Content-Type', 'application/json');
+                  res.end(JSON.stringify({ error: 'No GEMINI_API_KEY configured' }));
+                  return;
+                }
+                const { GoogleGenAI } = await import('@google/genai');
+                const ai = new GoogleGenAI({ apiKey });
+                const contextText = (retrievedChunks || [])
+                  .map((c: { title: string; category: string; content: string }, i: number) => `[Source ${i + 1}: ${c.title} (${c.category})]\n${c.content}`)
+                  .join('\n\n');
+
+                const systemInstruction = `You are the official portfolio AI for Arshdeep Kaur, an AI & Machine Learning Graduate based in Chandigarh, India.
+You must answer questions truthfully and exclusively using the provided verified context chunks below.
+CRITICAL GROUNDING RULES:
+1. Answer only using facts present in the provided context chunks.
+2. If the user asks about something not mentioned in the context (for example personal trivia, unrelated topics, or claims not verified in the context), reply: "I don't have information about that in Arshdeep's verified portfolio."
+3. If asked "Does she know React?", state that she has hands-on working knowledge of React, TypeScript, and Tailwind CSS for modern web and portfolio interfaces, while her primary specialization is Applied AI and Machine Learning.
+4. Keep answers professional, concise, structured with bullet points where appropriate, and cite the source project or credential.`;
+
+                const response = await ai.models.generateContent({
+                  model: 'gemini-2.5-flash',
+                  contents: `Retrieved Verified Portfolio Facts:\n${contextText}\n\nUser Question: ${query}\n\nPlease provide a grounded, concise answer:`,
+                  config: {
+                    systemInstruction,
+                  }
+                });
+
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ answer: response.text }));
+              } catch (err: unknown) {
+                const errMsg = err instanceof Error ? err.message : 'Server error';
+                res.statusCode = 500;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ error: errMsg }));
+              }
+            });
+          });
+        }
+      }
     ],
     resolve: {
       alias: {

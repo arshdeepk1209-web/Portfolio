@@ -15,6 +15,7 @@ import { PWAInstallButton } from './components/PWAInstallButton';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { ResumeModal } from './components/ResumeModal';
 import { GitHubPagesModal } from './components/GitHubPagesModal';
+import { PortfolioChatbot } from './components/PortfolioChatbot';
 import { VaabSimulator, ResumeGeneratorSimulator, SmartRouteSimulator } from './components/ProjectSimulators';
 import {
   Moon,
@@ -183,6 +184,9 @@ export default function App() {
         isOpen={isGitHubModalOpen}
         onClose={() => setIsGitHubModalOpen(false)}
       />
+
+      {/* Ask Me Anything (AMA) Portfolio Chatbot */}
+      <PortfolioChatbot />
 
       {/* NAVIGATION BAR */}
       <header className="sticky top-0 z-40 w-full border-b border-stone-200/80 dark:border-zinc-800/80 bg-white/75 dark:bg-zinc-950/75 backdrop-blur-xl transition-colors duration-300">
