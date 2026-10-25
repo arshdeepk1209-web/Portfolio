@@ -16,6 +16,7 @@ import { OfflineIndicator } from './components/OfflineIndicator';
 import { ResumeModal } from './components/ResumeModal';
 import { GitHubPagesModal } from './components/GitHubPagesModal';
 import { PortfolioChatbot } from './components/PortfolioChatbot';
+import { SkillsAndStatsDashboard } from './components/SkillsAndStatsDashboard';
 import { VaabSimulator, ResumeGeneratorSimulator, SmartRouteSimulator } from './components/ProjectSimulators';
 import {
   Moon,
@@ -50,7 +51,8 @@ import {
   ArrowUpRight,
   Loader2,
   Briefcase,
-  AlertCircle
+  AlertCircle,
+  Activity
 } from 'lucide-react';
 
 export default function App() {
@@ -222,6 +224,10 @@ export default function App() {
             <a href="#about" className="hover:text-emerald-500 transition-colors">About</a>
             <a href="#projects" className="hover:text-emerald-500 transition-colors">Projects</a>
             <a href="#experience" className="hover:text-emerald-500 transition-colors">Experience</a>
+            <a href="#stats" className="hover:text-emerald-500 transition-colors flex items-center gap-1 font-bold text-emerald-600 dark:text-emerald-400">
+              <Activity className="w-3.5 h-3.5" />
+              <span>Stats Dashboard</span>
+            </a>
             <a href="#skills" className="hover:text-emerald-500 transition-colors">Skills</a>
             <a href="#education" className="hover:text-emerald-500 transition-colors">Education</a>
             <a href="#contact" className="hover:text-emerald-500 transition-colors">Contact</a>
@@ -297,6 +303,13 @@ export default function App() {
                 className="block py-1.5 text-stone-700 dark:text-zinc-200 hover:text-emerald-500"
               >
                 Experience
+              </a>
+              <a
+                href="#stats"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-1.5 font-bold text-emerald-600 dark:text-emerald-400"
+              >
+                Stats & Skills Dashboard
               </a>
               <a
                 href="#skills"
@@ -761,6 +774,12 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      {/* SUBTLE HORIZONTAL SECTION DIVIDER */}
+      <SectionDivider />
+
+      {/* LIVE SKILLS & STATS DASHBOARD */}
+      <SkillsAndStatsDashboard />
 
       {/* SUBTLE HORIZONTAL SECTION DIVIDER */}
       <SectionDivider />

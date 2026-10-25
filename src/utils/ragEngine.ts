@@ -69,7 +69,9 @@ const SYNONYMS: Record<string, string[]> = {
   fastapi: ['fastapi', 'vaab', 'api', 'backend', 'python'],
   tableau: ['tableau', 'desktop', 'public', 'bi', 'dashboards', 'kpi', 'intel'],
   python: ['python', 'pandas', 'numpy', 'scikit-learn', 'matplotlib'],
-  nlp: ['resume', 'blip-2', 'generative', 'llm', 'language']
+  nlp: ['resume', 'blip-2', 'generative', 'llm', 'language'],
+  stats: ['dashboard', 'analytics', 'charts', 'telemetry', 'github', 'tableau'],
+  dashboard: ['stats', 'analytics', 'charts', 'chart.js', 'github', 'tableau', 'timeline']
 };
 
 /**
